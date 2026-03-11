@@ -1,0 +1,33 @@
+body{
+font-family:'Montserrat',sans-serif;
+font-size:16px;
+line-height:1.5;
+}
+
+button{
+background:#e99a2c;
+color:#ffffff;
+border:2px solid #ffffff;
+border-radius:3px;
+font-size:20px;
+padding:10px 20px;
+cursor:pointer;
+}
+
+.artist{
+border-bottom:1px solid #ddd;
+padding:15px;
+margin-bottom:15px;
+}
+
+.contest-phase{
+font-size:24px;
+color:#e99a2c;
+font-weight:bold;
+margin:20px 0;
+}
+
+.band-profile{
+padding:20px;
+border:1px solid #ddd;
+}
