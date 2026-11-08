@@ -1,33 +1,829 @@
-body{
-font-family:'Montserrat',sans-serif;
-font-size:16px;
-line-height:1.5;
+/* =========================================================
+   Song Contest PRO – öffentliche Seiten
+   ---------------------------------------------------------
+   Schlankes Stylesheet im PRO-BANDS-Look. Farben, Schriften und
+   Abstände kommen aus dem PRO-BANDS Child-Theme (--pb-*); die
+   Werte nach dem Komma sind Ersatzwerte ohne Child-Theme.
+   Festival-, Jury- und Admin-Oberflächen: assets/festival.css
+   ========================================================= */
+
+:root {
+    --scp-bg:      var(--pb-anthrazit, #1A1A1A);
+    --scp-bg-deep: var(--pb-black, #0B0B0B);
+    --scp-line:    #2F2F2F;
+    --scp-text:    var(--pb-bone, #E8E2D6);
+    --scp-soft:    var(--pb-text-soft, #CFC8BA);
+    --scp-mute:    var(--pb-text-mute, #A39C8E);
+    --scp-gold:    var(--pb-gold, #D4A437);
+    --scp-gold-h:  var(--pb-gold-hover, #E8C468);
+    --scp-rost:    var(--pb-rost, #C14A2A);
+    --scp-head:    var(--pb-font-head, 'Bebas Neue', Impact, sans-serif);
+    --scp-body:    var(--pb-font-body, 'Barlow', system-ui, sans-serif);
+}
+.band-bew-card, #band-list, .band-profile-card, .wave-player,
+.scp-public-leaderboard, .scp-alumni-grid, .winner-box,
+.scp-results-archive, .scp-voter-status, .scp-voter-modal,
+.scp-contest-schedule, .scp-contest-message {
+    color-scheme: dark;
+    box-sizing: border-box;
+}
+.band-bew-card *, #band-list *, .band-profile-card *, .wave-player *,
+.scp-voter-modal * { box-sizing: border-box; }
+
+/* ---------------------------------------------------------
+   1. Gemeinsame Bausteine
+   --------------------------------------------------------- */
+
+/* Karten */
+.band-bew-card, .band-card, .band-profile-card, .wave-player,
+.scp-public-leaderboard, .winner-box, .scp-result-contest,
+.scp-contest-schedule, .scp-voter-status, .scp-contest-message {
+    background: var(--scp-bg);
+    border: 1px solid var(--scp-line);
+    color: var(--scp-text);
+    font-family: var(--scp-body);
 }
 
-button{
-background:#e99a2c;
-color:#ffffff;
-border:2px solid #ffffff;
-border-radius:3px;
-font-size:20px;
-padding:10px 20px;
-cursor:pointer;
+/* Überschriften */
+.band-bew-card h2, .band-bew-card h3, .contest-headline, .band-card h3,
+.band-profile-card h1, .wave-player-title h3, .scp-public-leaderboard h2,
+.winner-box h2, .winner-box h3, .scp-result-header h2, .scp-result-group h3,
+.scp-alumni-grid h3, .scp-voter-modal-dialog h3, .scp-contest-schedule h2,
+.scp-contest-schedule h3 {
+    font-family: var(--scp-head) !important;
+    font-weight: 400 !important;
+    color: var(--scp-text);
+    line-height: 1;
+    letter-spacing: .5px;
+    margin: 0 0 12px;
+    padding: 0;
 }
 
-.artist{
-border-bottom:1px solid #ddd;
-padding:15px;
-margin-bottom:15px;
+/* Buttons */
+.contest-submit, .vote-btn, .scp-voter-submit, .play-btn,
+.scp-details-btn, .scp-copy-link, .share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 48px;
+    padding: 12px 22px;
+    border: 2px solid var(--scp-gold);
+    border-radius: 0;
+    background: var(--scp-gold);
+    color: var(--scp-bg-deep) !important;
+    font-family: var(--scp-body);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.contest-submit:hover, .vote-btn:hover, .scp-voter-submit:hover, .play-btn:hover {
+    background: var(--scp-gold-h);
+    border-color: var(--scp-gold-h);
+}
+/* Zweitrangige Buttons: umrandet */
+.scp-details-btn, .scp-copy-link, .share-btn {
+    background: transparent;
+    border-color: var(--scp-text);
+    color: var(--scp-text) !important;
+}
+.scp-details-btn:hover, .scp-copy-link:hover, .share-btn:hover {
+    background: var(--scp-text);
+    color: var(--scp-bg-deep) !important;
+}
+.contest-submit:focus-visible, .vote-btn:focus-visible, .scp-voter-submit:focus-visible,
+.play-btn:focus-visible, .scp-details-btn:focus-visible, .scp-copy-link:focus-visible,
+.share-btn:focus-visible {
+    outline: 2px solid var(--scp-gold);
+    outline-offset: 2px;
 }
 
-.contest-phase{
-font-size:24px;
-color:#e99a2c;
-font-weight:bold;
-margin:20px 0;
+/* Eingabefelder */
+.contest-form input[type="text"], .contest-form input[type="email"],
+.contest-form textarea, .scp-voter-modal input[type="email"],
+.scp-voter-modal input[type="text"], .scp-ref-link {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    background: var(--scp-bg-deep);
+    border: 1px solid #3A3A3A;
+    border-radius: 0;
+    color: var(--scp-text);
+    font-family: var(--scp-body);
+    font-size: 16px;
+}
+.contest-form textarea { min-height: 130px; resize: vertical; }
+.contest-form input:focus, .contest-form textarea:focus,
+.scp-voter-modal input:focus, .scp-ref-link:focus {
+    outline: 2px solid var(--scp-gold);
+    outline-offset: 1px;
+    border-color: var(--scp-gold);
+}
+.contest-form ::placeholder, .scp-voter-modal ::placeholder { color: var(--scp-mute); opacity: 1; }
+
+/* Hinweise */
+.contest-error, .contest-success, .scp-vote-disabled, .scp-contest-message {
+    padding: 14px 18px;
+    margin: 0 0 20px;
+    font-family: var(--scp-body);
+    color: var(--scp-text);
+}
+.contest-error   { border-left: 4px solid var(--scp-rost); background: rgba(193,74,42,.15); }
+.contest-success { border-left: 4px solid var(--scp-gold); background: rgba(212,164,55,.12); }
+.scp-vote-disabled { border: 1px dashed #3A3A3A; color: var(--scp-mute); margin: 12px 0 0; }
+
+/* Audio im dunklen Look */
+.band-card audio, .winner-audio audio, .scp-alumni-grid audio {
+    width: 100%;
+    height: 40px;
+    color-scheme: dark;
 }
 
-.band-profile{
-padding:20px;
-border:1px solid #ddd;
+/* ---------------------------------------------------------
+   2. Bewerbung [songcontest_application]
+   --------------------------------------------------------- */
+.band-bew-card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: clamp(24px, 4vw, 44px);
+}
+.band-bew-card h2 { font-size: clamp(36px, 4vw, 52px); }
+.contest-form { display: flex; flex-direction: column; gap: 14px; }
+.contest-form h3 {
+    font-size: 28px;
+    margin: 22px 0 0;
+    padding-top: 22px;
+    border-top: 1px solid var(--scp-line);
+}
+.contest-form h3:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.contest-form h4 {
+    margin: 0;
+    padding: 0;
+    font-family: var(--scp-body);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--scp-mute);
+}
+.contest-form > label {
+    margin: 6px 0 -6px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--scp-text);
+}
+.contest-form input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    background: var(--scp-bg-deep);
+    border: 1px dashed #4A4A4A;
+    color: var(--scp-soft);
+    font-family: var(--scp-body);
+}
+.contest-form input[type="file"]::file-selector-button {
+    margin-right: 14px;
+    padding: 8px 14px;
+    border: 2px solid var(--scp-text);
+    background: transparent;
+    color: var(--scp-text);
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+.scp-privacy-notice, .scp-consent-note {
+    margin: 6px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--scp-mute);
+}
+.scp-consent { padding: 14px 16px; border: 1px solid var(--scp-line); background: var(--scp-bg-deep); }
+.scp-consent-label { display: flex; gap: 12px; align-items: flex-start; color: var(--scp-soft); font-size: 15px; cursor: pointer; }
+.scp-consent-label input { width: 20px; height: 20px; margin-top: 2px; flex: none; accent-color: var(--scp-gold); }
+/* Absicherung gegen ältere Formular-Regeln aus Divi / Theme-Optionen
+   (z. B. "input { width:100%; padding:…; height:…}"), die die
+   Checkbox aufblähen und den Text aus der Box schieben. */
+.contest-form .scp-consent-label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-weight: 400 !important;
+}
+.contest-form .scp-consent-label > span { flex: 1 1 auto; min-width: 0; }
+.contest-form .scp-consent-label input[type="checkbox"] {
+    -webkit-appearance: checkbox !important;
+    appearance: auto !important;
+    width: 20px !important;
+    height: 20px !important;
+    min-width: 20px !important;
+    min-height: 0 !important;
+    max-width: 20px !important;
+    padding: 0 !important;
+    margin: 2px 0 0 !important;
+    border: 0 !important;
+    background: none !important;
+    flex: 0 0 20px !important;
+    box-shadow: none !important;
+}
+.contest-form .contest-submit {
+    background: var(--scp-gold) !important;
+    border-color: var(--scp-gold) !important;
+    color: var(--scp-bg-deep) !important;
+    border-radius: 0 !important;
+}
+.contest-form .contest-submit:hover {
+    background: var(--scp-gold-h) !important;
+    border-color: var(--scp-gold-h) !important;
+}
+.contest-submit { width: 100%; min-height: 56px; margin-top: 10px; font-size: 16px; }
+
+/* Bewerbung geschlossen */
+.scp-application-closed { text-align: left; }
+.scp-application-closed p { color: var(--scp-soft); }
+
+/* ---------------------------------------------------------
+   3. Voting-Liste [songcontest_voting]
+   --------------------------------------------------------- */
+.contest-headline { font-size: clamp(40px, 5vw, 64px); margin: 0 0 28px; }
+#band-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 20px;
+}
+#band-list > .contest-headline,
+#band-list > p, #band-list > .scp-contest-message { grid-column: 1 / -1; }
+
+.band-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: border-color .2s ease;
+}
+.band-card:hover { border-color: #4A4A4A; }
+.rank-number {
+    position: absolute;
+    top: 12px; left: 12px;
+    z-index: 2;
+    padding: 4px 10px;
+    background: var(--scp-bg-deep);
+    color: var(--scp-gold);
+    font-family: var(--scp-head);
+    font-size: 26px;
+    line-height: 1;
+}
+.band-image { aspect-ratio: 1 / 1; background: var(--scp-bg-deep); overflow: hidden; }
+.band-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.band-card .band-content { display: flex; flex-direction: column; gap: 14px; padding: 20px; flex: 1; }
+.band-card h3 { font-size: 30px; margin: 0; }
+.song-title { margin: -8px 0 0 !important; padding: 0 !important; color: var(--scp-mute); font-size: 15px; }
+.vote-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.vote-bar audio { flex: 1 1 100%; }
+.scp-vote-count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    color: var(--scp-soft);
+    font-weight: 600;
+}
+.scp-vote-count .votes { font-family: var(--scp-head); font-size: 30px; line-height: 1; color: var(--scp-gold); }
+.vote-bar .vote-btn { margin-left: auto; }
+.band-card .scp-details-btn { align-self: flex-start; min-height: 44px; padding: 10px 18px; font-size: 14px; }
+.vote-btn.voted, .vote-btn[disabled] { opacity: .55; cursor: default; }
+.scp-vote-btn.scp-vote-pending { opacity: .65; }
+.vote-plus {
+    font-family: var(--scp-head);
+    font-size: 28px;
+    color: var(--scp-gold);
+    animation: scpPlus 1s ease-out;
+}
+@keyframes scpPlus { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+.band-highlight {
+    animation: scpFlash 3s ease;
+    box-shadow: 0 0 0 3px var(--scp-gold), 0 0 30px rgba(212,164,55,.45);
+}
+@keyframes scpFlash { 0%, 60% { box-shadow: 0 0 0 3px var(--scp-gold), 0 0 30px rgba(212,164,55,.6); } 100% { box-shadow: 0 0 0 3px var(--scp-gold); } }
+.scp-login-return-highlight { outline: 3px solid var(--scp-gold); outline-offset: 4px; }
+
+/* Teilen */
+.share-wrapper { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--scp-line); }
+.share-title {
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--scp-mute);
+}
+.share-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+.share-btn { min-height: 40px; padding: 8px 12px; font-size: 13px; border-width: 1px; }
+.scp-share-box { display: flex; flex: 1 1 100%; gap: 8px; margin-top: 4px; }
+.scp-share-box .scp-ref-link { flex: 1; min-width: 0; min-height: 40px; font-size: 14px; }
+.scp-copy-link { min-height: 40px; padding: 8px 14px; font-size: 13px; border-width: 1px; }
+
+/* ---------------------------------------------------------
+   4. Band-Profil [songcontest_band_profile]
+   --------------------------------------------------------- */
+.band-profile-card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin: 0 0 20px;
+}
+.band-image2 { flex: 1 1 340px; min-width: 0; background: var(--scp-bg-deep); }
+.band-image2 img { display: block; width: 100%; height: 100%; aspect-ratio: 1 / 1; object-fit: cover; }
+.scp-band-profile-card {
+    flex: 1 1 380px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: clamp(22px, 3vw, 36px);
+}
+.band-profile-card h1 { font-size: clamp(44px, 5vw, 72px); margin: 0 0 14px; }
+.scp-band-profile-card .scp-vote-count { margin-bottom: 14px; font-size: 18px; }
+.scp-band-profile-card .scp-vote-count .votes { font-size: 44px; }
+.scp-band-profile-card .vote-btn { min-height: 56px; padding: 14px 28px; font-size: 16px; }
+.scp-band-info {
+    flex: 1 1 100%;
+    padding: clamp(22px, 3vw, 36px);
+    color: var(--scp-soft);
+    line-height: 1.6;
+}
+.scp-band-info strong { color: var(--scp-text); }
+.scp-social-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    flex: 1 1 100%;
+    padding: 12px clamp(22px, 3vw, 36px);
+    border-top: 1px solid var(--scp-line);
+    color: var(--scp-soft);
+    overflow-wrap: anywhere;
+}
+.scp-social-grid > div:first-child { width: 150px !important; color: var(--scp-mute); }
+
+/* Wellenform-Player */
+.wave-player { padding: 22px; margin: 0 0 20px; touch-action: pan-y; }
+.wave-player-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin-bottom: 14px; }
+.wave-player-title h3 { font-size: 30px; margin: 0; }
+.wave-player-title h4 { margin: 0; font-size: 15px; font-weight: 600; color: var(--scp-mute); font-family: var(--scp-body); }
+.waveform { width: 100%; }
+.waveform canvas { touch-action: pan-y !important; }
+.play-btn { display: flex; min-width: 140px; margin: 14px auto 0; font-size: 22px; }
+
+/* ---------------------------------------------------------
+   5. Charts [songcontest_charts]
+   --------------------------------------------------------- */
+.scp-public-leaderboard { padding: clamp(22px, 3vw, 36px); }
+.scp-public-leaderboard h2 { font-size: clamp(36px, 4vw, 52px); }
+.scp-chart-note { color: var(--scp-mute); font-size: 14px; }
+.scp-charts {
+    list-style: none !important;
+    counter-reset: scp-rank;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.scp-charts li {
+    counter-increment: scp-rank;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 12px 0 !important;
+    margin: 0 !important;
+    border-bottom: 1px solid var(--scp-line);
+    color: var(--scp-mute);
+    font-size: 16px;
+}
+.scp-charts li::before {
+    content: counter(scp-rank);
+    min-width: 2ch;
+    font-family: var(--scp-head);
+    font-size: 30px;
+    line-height: 1;
+    color: var(--scp-mute);
+}
+.scp-charts li:nth-child(-n+5)::before { color: var(--scp-gold); }
+.chart-name { flex: 1; color: var(--scp-text); font-weight: 700; font-size: 18px; }
+.chart-votes { color: var(--scp-gold); font-weight: 700; }
+
+/* ---------------------------------------------------------
+   6. Ehemalige Teilnehmer [songcontest_band_grid]
+   --------------------------------------------------------- */
+.scp-alumni-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+.scp-alumni-grid .scp-grid-card {
+    position: relative;
+    min-height: 380px;
+    background-color: var(--scp-bg);
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    filter: grayscale(.35);
+    transition: filter .3s ease;
+}
+.scp-alumni-grid .scp-grid-card:hover { filter: none; }
+.scp-grid-overlay {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(11,11,11,.97) 0%, rgba(11,11,11,.8) 65%, rgba(11,11,11,0) 100%);
+    color: var(--scp-text);
+}
+.scp-grid-overlay h3 { font-size: 30px; margin: 4px 0; }
+.scp-grid-contest, .scp-grid-song-title {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--scp-mute);
+}
+.scp-grid-overlay audio { margin-top: 12px; }
+.scp-grid-placement {
+    position: absolute;
+    top: 16px; right: 16px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--scp-head);
+    line-height: 1;
+}
+.scp-grid-placement-winner {
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: var(--scp-gold);
+    color: var(--scp-bg-deep);
+    font-size: 34px;
+    box-shadow: 0 0 0 3px var(--scp-bg-deep);
+}
+.scp-grid-placement-top5 {
+    padding: 6px 12px;
+    background: var(--scp-bg-deep);
+    border: 1px solid var(--scp-text);
+    color: var(--scp-text);
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+.scp-grid-winner { box-shadow: inset 0 0 0 3px var(--scp-gold); }
+.scp-band-grid-empty { color: var(--scp-mute); }
+
+/* ---------------------------------------------------------
+   7. Gewinner [songcontest_winner]
+   --------------------------------------------------------- */
+.winner-box { padding: clamp(24px, 4vw, 48px); text-align: center; border: 2px solid var(--scp-gold); }
+.winner-box h2 { font-size: clamp(36px, 4vw, 56px); color: var(--scp-gold); }
+.winner-box h3 { font-size: clamp(40px, 5vw, 72px); }
+.winner-image {
+    display: block;
+    width: min(460px, 100%);
+    aspect-ratio: 1 / 1;
+    height: auto;
+    margin: 10px auto 24px;
+    object-fit: cover;
+    box-shadow: 0 0 0 10px var(--scp-text);
+}
+.winner-song, .winner-votes { color: var(--scp-soft); font-size: 18px; font-weight: 600; }
+.winner-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin: 28px 0;
+}
+.winner-stat { padding: 16px; background: var(--scp-bg-deep); border: 1px solid var(--scp-line); }
+.winner-stat-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--scp-mute);
+}
+.winner-stat strong { font-family: var(--scp-head); font-weight: 400; font-size: 36px; color: var(--scp-gold); }
+.winner-info { max-width: 760px; margin: 0 auto 24px; text-align: left; color: var(--scp-soft); }
+.winner-audio audio { max-width: 600px; }
+
+/* ---------------------------------------------------------
+   8. Ergebnis-Archiv [songcontest_results]
+   --------------------------------------------------------- */
+.scp-results-archive { display: flex; flex-direction: column; gap: 28px; }
+.scp-result-contest { padding: clamp(22px, 3vw, 36px); }
+.scp-result-header h2 { font-size: clamp(36px, 4vw, 56px); }
+.scp-result-group { margin-top: 24px; }
+.scp-result-group h3 { font-size: 28px; }
+.scp-result-featured { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; border: 2px solid var(--scp-gold); background: var(--scp-bg-deep); }
+.scp-result-featured > img, .scp-result-finalist > img { width: 160px; aspect-ratio: 1 / 1; object-fit: cover; flex: none; }
+.scp-result-featured-content, .scp-result-finalist-content { flex: 1 1 240px; min-width: 0; }
+.scp-result-finalists { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); gap: 14px; }
+.scp-result-finalist { display: flex; gap: 14px; padding: 14px; border: 1px solid var(--scp-line); background: var(--scp-bg-deep); }
+.scp-result-finalist > img { width: 90px; }
+.scp-result-position { font-family: var(--scp-head); font-size: 32px; line-height: 1; color: var(--scp-mute); }
+.scp-result-position-winner { font-size: 56px; color: var(--scp-gold); }
+.scp-result-featured h4, .scp-result-finalist h4 { margin: 4px 0; font-family: var(--scp-head); font-weight: 400; font-size: 28px; color: var(--scp-text); }
+.scp-result-song { margin: 0 0 8px !important; color: var(--scp-mute); }
+.scp-result-stats { display: flex; flex-wrap: wrap; gap: 8px; }
+.scp-result-stat { padding: 6px 10px; border: 1px solid var(--scp-line); font-size: 13px; color: var(--scp-mute); }
+.scp-result-stat strong { margin-left: 6px; color: var(--scp-text); }
+.scp-result-list { margin: 0; padding-left: 22px; color: var(--scp-soft); }
+.scp-result-list li { padding: 4px 0; }
+.scp-result-participants { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 8px; }
+.scp-result-participant { padding: 10px 12px; border: 1px solid var(--scp-line); color: var(--scp-soft); }
+.scp-result-participant strong { display: block; color: var(--scp-text); }
+
+/* ---------------------------------------------------------
+   9. Voting-Anmeldung (Status + Fenster)
+   --------------------------------------------------------- */
+.scp-voter-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    padding: 16px 20px;
+    margin: 0 0 24px;
+}
+.scp-voter-status-ok   { border-left: 4px solid var(--scp-gold); }
+.scp-voter-status-info { border-left: 4px solid var(--scp-rost); }
+.scp-voter-status-info { flex-direction: column; align-items: flex-start; gap: 4px; }
+.scp-voter-status > div { display: flex; flex-direction: column; gap: 2px; }
+.scp-voter-status strong { color: var(--scp-text); }
+.scp-voter-status span, .scp-voter-status p { color: var(--scp-soft); margin: 0; }
+.scp-voter-status button, .scp-voter-logout {
+    padding: 8px 14px;
+    border: 1px solid var(--scp-text);
+    background: transparent;
+    color: var(--scp-text);
+    font-family: var(--scp-body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+.scp-voter-status button:hover, .scp-voter-logout:hover { background: var(--scp-text); color: var(--scp-bg-deep); }
+.scp-voter-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.scp-voter-modal.is-open { display: flex; }
+.scp-voter-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.75); }
+.scp-voter-modal-dialog {
+    position: relative;
+    z-index: 2;
+    width: min(520px, 100%);
+    padding: 30px 26px;
+    background: var(--scp-bg);
+    border: 1px solid var(--scp-line);
+    border-top: 4px solid var(--scp-gold);
+    color: var(--scp-text);
+    font-family: var(--scp-body);
+}
+.scp-voter-modal-dialog h3 { font-size: 36px; margin-right: 40px; }
+.scp-voter-modal-dialog p { color: var(--scp-soft); margin: 0 0 16px; }
+.scp-voter-modal-dialog form { display: flex; flex-direction: column; gap: 12px; }
+.scp-voter-modal-close {
+    position: absolute;
+    top: 8px; right: 10px;
+    width: 44px; height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--scp-text);
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+}
+.scp-voter-modal-dialog label { font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.scp-voter-submit { width: 100%; }
+.scp-voter-form-message { min-height: 1.2em; font-size: 15px; }
+.scp-voter-form-message.success { color: var(--scp-gold); }
+.scp-voter-form-message.error   { color: #E0785A; }
+.scp-voter-privacy { font-size: 13px; color: var(--scp-mute) !important; margin: 4px 0 0 !important; }
+
+/* ---------------------------------------------------------
+   10. Ablauf, Phase, Countdown, Phasen-Leiste
+   --------------------------------------------------------- */
+.scp-contest-schedule { padding: clamp(22px, 3vw, 36px); }
+.scp-contest-schedule h2 { font-size: clamp(36px, 4vw, 52px); }
+.scp-schedule-step { padding: 14px 0; border-top: 1px solid var(--scp-line); }
+.scp-schedule-step h3 { font-size: 26px; margin-bottom: 4px; }
+.scp-schedule-step p { margin: 0 0 4px; color: var(--scp-soft); }
+.contest-phase {
+    display: inline-block;
+    padding: 8px 14px;
+    background: var(--pb-rost, #C14A2A);
+    color: #FFFFFF;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Kompakter Countdown (.scp-cd) */
+.scp-cd { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 18px 0 0; }
+.scp-cd__label {
+    font-family: var(--pb-font-body, 'Barlow', sans-serif);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pb-text-mute, #A39C8E);
+}
+.scp-cd__units { display: inline-flex; gap: 6px; }
+.scp-cd__unit {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    padding: 6px 10px;
+    background: var(--pb-anthrazit, #1A1A1A);
+    border: 1px solid var(--pb-line, #2A2A2A);
+    line-height: 1;
+}
+.scp-cd__unit strong {
+    font-family: var(--pb-font-head, 'Bebas Neue', Impact, sans-serif);
+    font-weight: 400;
+    font-size: 28px;
+    color: var(--pb-gold, #D4A437);
+    min-width: 1.1em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.scp-cd__unit small {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--pb-text-mute, #A39C8E);
+}
+.pb-section--rost .scp-cd__label { color: #FBEDE6; }
+.pb-section--rost .scp-cd__unit { background: rgba(11,11,11,.85); border-color: rgba(11,11,11,.85); }
+.pb-section--rost .scp-cd__unit strong { color: #FFFFFF; }
+.pb-section--rost .scp-cd__unit small { color: #E8E2D6; }
+.band-bew-card .scp-cd { margin: 20px 0 8px; }
+.band-bew-card .scp-cd__unit { background: var(--pb-black, #0B0B0B); }
+
+/* Buttons-Layout des Phasen-Banners */
+.scp-phase-buttons .pb-btn-group { margin-top: 32px; }
+.scp-phase-buttons .scp-cd { margin-top: 20px; }
+
+/* Phasen-Leiste [songcontest_phase_timeline] */
+.scp-timeline {
+    list-style: none !important;
+    margin: 40px 0 0 !important;
+    padding: 0 !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+.scp-timeline__step {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 22px 20px 22px 0 !important;
+    margin: 0 !important;
+    border-top: 4px solid var(--pb-line, #2A2A2A);
+}
+.scp-timeline__step::before { display: none !important; }
+.scp-timeline__status {
+    font-family: var(--pb-font-body, 'Barlow', sans-serif);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pb-text-mute, #A39C8E);
+}
+.scp-timeline__title {
+    font-family: var(--pb-font-head, 'Bebas Neue', Impact, sans-serif);
+    font-size: 32px;
+    line-height: 1;
+    color: var(--pb-text-soft, #CFC8BA);
+}
+.scp-timeline__date { font-size: 15px; font-weight: 600; color: var(--pb-bone, #E8E2D6); }
+.scp-timeline__text { font-size: 15px; line-height: 1.45; color: var(--pb-text-mute, #A39C8E); }
+.scp-timeline__link {
+    margin-top: 2px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: var(--pb-gold, #D4A437) !important;
+    text-decoration: none !important;
+}
+.scp-timeline__link:hover { text-decoration: underline !important; }
+.scp-timeline__step.is-done { border-top-color: #5A554C; }
+.scp-timeline__step.is-done .scp-timeline__title { color: var(--pb-text-mute, #A39C8E); }
+.scp-timeline__step.is-now { border-top-color: var(--pb-rost, #C14A2A); }
+.scp-timeline__step.is-now .scp-timeline__status { color: var(--pb-rost-text, #E0785A); }
+.scp-timeline__step.is-now .scp-timeline__title { color: #FFFFFF; }
+.scp-timeline__step.is-next { border-top-color: var(--pb-gold, #D4A437); }
+.scp-timeline__step.is-next .scp-timeline__status { color: var(--pb-gold, #D4A437); }
+.scp-timeline__step.is-next .scp-timeline__title { color: var(--pb-bone, #E8E2D6); }
+
+/* ---------------------------------------------------------
+   10b. Jury-Vorauswahl [songcontest_jury_preselect]
+   (bewusst spezifisch, damit festival.css hier nicht übersteuert)
+   --------------------------------------------------------- */
+.jury-preselect {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)) !important;
+    gap: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    color-scheme: dark;
+}
+.jury-preselect .jury-card {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: var(--scp-bg) !important;
+    border: 1px solid var(--scp-line) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: var(--scp-text) !important;
+    font-family: var(--scp-body);
+}
+.jury-preselect .jury-card h3 {
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: var(--scp-head) !important;
+    font-weight: 400 !important;
+    font-size: 28px !important;
+    line-height: 1 !important;
+    color: var(--scp-text) !important;
+}
+.jury-preselect .jury-song-title,
+.jury-preselect .no-audio {
+    margin: -6px 0 0 !important;
+    padding: 0 !important;
+    font-size: 15px !important;
+    color: var(--scp-mute) !important;
+}
+.jury-preselect .jury-song-title strong { color: var(--scp-soft) !important; font-weight: 600; }
+.jury-preselect audio { display: block; width: 100% !important; height: 40px; margin: 0 !important; color-scheme: dark; }
+.jury-preselect .jury-pick {
+    margin-top: auto !important;
+    width: 100% !important;
+    min-height: 48px !important;
+    padding: 10px 18px !important;
+    border: 2px solid var(--scp-text) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--scp-text) !important;
+    font-family: var(--scp-body) !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    letter-spacing: 1px !important;
+    text-transform: uppercase !important;
+    cursor: pointer;
+}
+.jury-preselect .jury-pick:hover { background: var(--scp-text) !important; color: var(--scp-bg-deep) !important; }
+.jury-preselect .jury-pick.active {
+    background: var(--scp-gold) !important;
+    border-color: var(--scp-gold) !important;
+    color: var(--scp-bg-deep) !important;
+}
+.jury-preselect .jury-card:has(.jury-pick.active) { border-color: var(--scp-gold) !important; }
+
+/* ---------------------------------------------------------
+   11. Handy
+   --------------------------------------------------------- */
+@media (max-width: 767px) {
+    .scp-alumni-grid { grid-template-columns: 1fr; }
+    .scp-alumni-grid .scp-grid-card { min-height: 340px; }
+    .vote-bar .vote-btn { margin-left: 0; flex: 1 1 100%; }
+    .scp-social-grid > div:first-child { width: 100% !important; }
+    .scp-timeline { grid-template-columns: 1fr; }
+    .scp-timeline__step { padding: 18px 0 18px 18px !important; border-top: 0; border-left: 4px solid var(--pb-line, #2A2A2A); }
+    .scp-timeline__step.is-done { border-left-color: #5A554C; }
+    .scp-timeline__step.is-now  { border-left-color: var(--pb-rost, #C14A2A); }
+    .scp-timeline__step.is-next { border-left-color: var(--pb-gold, #D4A437); }
+}
+@media (max-width: 480px) {
+    .scp-cd__unit { padding: 5px 8px; }
+    .scp-cd__unit strong { font-size: 24px; }
+    .scp-share-box { flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .band-highlight, .vote-plus { animation: none; }
 }

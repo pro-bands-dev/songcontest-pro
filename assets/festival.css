@@ -1,0 +1,1779 @@
+/* =========================================================
+   Song Contest PRO – Festival-, Jury- und Admin-Oberflächen
+   ---------------------------------------------------------
+   Unveränderter Stand von 3.0.0-dev7.8.29 (vorher assets/style.css).
+   Wird nur noch geladen für:
+   - WordPress-Backend (Festival-Cockpit, Jury-Dashboard, …)
+   - Festival-Bildschirme (?scp_final_screen=qr|live|vote|jury|device|pair)
+   - Jury-Seiten im Frontend (/jury…, [songcontest_jury_voting], [songcontest_jury_preselect])
+   Öffentliche Seiten nutzen das schlanke assets/style.css.
+   ========================================================= */
+
+/* =========================
+BASE
+========================= */
+
+body{
+font-family:'Montserrat',sans-serif;
+font-size:16px;
+line-height:1.5;
+}
+
+html,
+body{
+overflow-x:hidden;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+}
+
+body{
+position:relative;
+touch-action:auto;
+}
+
+/* =========================
+BAND CARD (FIXED)
+========================= */
+
+.band-card{
+position:relative;
+width:100%;
+display:flex;
+gap:20px;
+padding:15px;
+border:1px solid #ddd;
+border-radius:6px;
+margin:15px 0;
+background:#fff;
+align-items:flex-start;
+}
+
+.contest-headline{
+    text-align:center;
+	color:#fff;
+    font-size:32px;
+    margin-bottom:30px;
+}
+
+.band-highlight{
+    animation: bandFlash 3s ease;
+    box-shadow:
+        0 0 0 4px #D4A437,
+        0 0 30px rgba(212,164,55,.6);
+}
+
+@keyframes bandFlash{
+    0%{
+        transform:scale(1.03);
+    }
+    100%{
+        transform:scale(1);
+    }
+}
+/* =========================
+PROFILE
+========================= */
+
+.band-profile-card{
+position:relative;
+width:100%;
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+padding:20px;
+border:1px solid #ddd;
+border-radius:6px;
+margin:15px 0;
+background:#fff;
+}
+
+.scp-band-profile-card{
+display:flex;
+gap:10px;
+padding:20px;
+border-radius:6px;
+}
+
+/* =========================
+GRID
+========================= */
+/* ========================================
+   EHEMALIGE CONTEST-TEILNEHMER
+======================================== */
+
+.scp-band-grid.scp-alumni-grid{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:24px;
+    width:100%;
+    margin:25px 0;
+}
+
+/* Grid Card */
+
+.scp-alumni-grid .scp-grid-card{
+    position:relative;
+    width:100%;
+    min-height:380px;
+    background-color:#1a1a1a;
+    background-size:cover;
+    background-position:center;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 4px 14px rgba(0,0,0,0.18);
+}
+
+/* Overlay */
+
+.scp-alumni-grid .scp-grid-overlay{
+    position:absolute;
+    right:0;
+    bottom:0;
+    left:0;
+    padding:18px;
+    color:#fff;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,0.96) 0%,
+        rgba(0,0,0,0.78) 65%,
+        rgba(0,0,0,0.15) 100%
+    );
+    transition:background 0.3s ease;
+}
+
+.scp-alumni-grid .scp-grid-card:hover .scp-grid-overlay{
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,1) 0%,
+        rgba(0,0,0,0.88) 70%,
+        rgba(0,0,0,0.25) 100%
+    );
+}
+
+.scp-alumni-grid .scp-grid-overlay h3{
+    margin:5px 0;
+    color:#fff;
+    font-size:24px;
+    line-height:1.25;
+}
+
+.scp-grid-song-title{
+    margin:0 0 12px;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+}
+
+/* Contest-Angabe */
+
+.scp-grid-contest{
+    display:inline-block;
+    margin-bottom:4px;
+    padding:4px 9px;
+    border:1px solid rgba(255,255,255,0.5);
+    border-radius:999px;
+    color:#fff;
+    background:rgba(16,37,63,0.85);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.03em;
+}
+
+/* Audio */
+
+.scp-alumni-grid .scp-grid-overlay audio{
+    display:block;
+    width:100%;
+    height:40px;
+    margin-top:12px;
+    opacity:1;
+}
+
+/* Platzierungsmarken */
+
+.scp-grid-placement{
+    position:absolute;
+    z-index:5;
+    top:16px;
+    right:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    box-shadow:0 3px 12px rgba(0,0,0,0.35);
+}
+
+/* Gewinner: goldene runde 1 */
+
+.scp-grid-placement-winner{
+    width:58px;
+    height:58px;
+    border:3px solid #fff3bd;
+    border-radius:50%;
+    color:#111;
+    background:#d4a437;
+    font-size:28px;
+}
+
+/* Top 5 */
+
+.scp-grid-placement-top5{
+    min-width:72px;
+    min-height:38px;
+    padding:7px 12px;
+    border:2px solid #fff;
+    border-radius:999px;
+    color:#fff;
+    background:rgba(16,37,63,0.92);
+    font-size:13px;
+    letter-spacing:0.04em;
+}
+
+/* Hervorhebung */
+
+.scp-alumni-grid .scp-grid-winner{
+    outline:3px solid #d4a437;
+    outline-offset:-3px;
+}
+
+.scp-alumni-grid .scp-grid-top5{
+    outline:2px solid #10253f;
+    outline-offset:-2px;
+}
+
+.scp-band-grid-empty{
+    padding:25px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:#fff;
+    text-align:center;
+}
+
+/* Mobil: ein Teilnehmer pro Reihe */
+
+@media(max-width:700px){
+
+    .scp-band-grid.scp-alumni-grid{
+        grid-template-columns:1fr;
+        gap:18px;
+    }
+
+    .scp-alumni-grid .scp-grid-card{
+        min-height:340px;
+    }
+
+    .scp-alumni-grid .scp-grid-overlay h3{
+        font-size:21px;
+    }
+}
+
+.scp-band-grid{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.scp-grid-card{
+position:relative;
+width:250px;
+height:250px;
+background-size:cover;
+background-position:center;
+border-radius:6px;
+overflow:hidden;
+flex-grow:1;
+}
+
+/* =========================
+GRID OVERLAY
+========================= */
+
+.scp-grid-overlay{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+background:rgba(0,0,0,0.6);
+color:#fff;
+padding:15px;
+transition:0.3s;
+}
+
+.scp-grid-overlay h3{
+color:#fff;
+}
+
+.scp-grid-card:hover .scp-grid-overlay{
+background:rgba(0,0,0,0.85);
+}
+
+/* =========================
+IMAGES
+========================= */
+
+.band-image img{
+width:250px;
+height:250px;
+object-fit:cover;
+border-radius:4px;
+}
+
+.band-image2 img{
+width:320px;
+height:320px;
+object-fit:cover;
+border-radius:4px;
+}
+
+/* =========================
+CONTENT
+========================= */
+
+.band-content{
+flex:1;
+min-width:0;
+}
+
+.song-title{
+font-weight:600;
+margin-bottom:5px;
+}
+
+/* =========================
+VOTING
+========================= */
+
+.vote-bar{
+display:flex;
+justify-content:space-between;
+/*justify-content:right ;*/
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.scp-vote-count{
+font-size:22px;
+}
+
+.vote-btn{
+background:#e99a2c;
+color:#fff;
+border:none;
+padding:10px 20px;
+font-size:18px;
+border-radius:3px;
+cursor:pointer;
+}
+
+.vote-btn:hover{
+opacity:0.9;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.scp-details-btn{
+display:inline-block;
+margin-top:10px;
+padding:8px 12px;
+background:#e99a2c;
+color:#fff;
+text-decoration:none;
+border-radius:4px;
+}
+
+/* =========================
+SHARE
+========================= */
+
+.share-bar{
+margin-top:10px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.share-bar a{
+font-size:14px;
+color:#e99a2c;
+text-decoration:none;
+}
+/* =========================
+   SOCIAL SHARE BUTTONS
+========================= */
+
+.share-wrapper{
+margin-top:5px;
+margin-bottom:0px;
+padding:10px;
+background:#fafafa;
+border:1px solid #eee;
+border-radius:8px;
+}
+
+.share-title{
+font-weight:bold;
+margin-bottom:12px;
+font-size:15px;
+}
+
+.share-bar{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.share-btn{
+flex:1;
+min-width:150px;
+padding:12px;
+border-radius:6px;
+text-align:center;
+text-decoration:none;
+font-weight:bold;
+color:#fff !important;
+transition:0.2s ease;
+}
+
+.share-btn:hover{
+transform:translateY(-2px);
+opacity:0.92;
+}
+
+/* Farben */
+
+.share-btn.whatsapp{
+background:#25D366;
+}
+
+.share-btn.facebook{
+background:#1877F2;
+}
+
+.share-btn.twitter{
+background:#111;
+}
+
+/* =========================
+WAVE PLAYER
+========================= */
+
+.wave-player{
+padding:20px;
+border:1px solid #ddd;
+border-radius:6px;
+margin:15px 0;
+touch-action:pan-y;
+}
+
+.waveform{
+width:100%;
+}
+
+.waveform canvas{
+touch-action:pan-y !important;
+}
+
+.play-btn{
+display:block;
+min-width:150px;
+margin:10px auto;
+background:#e99a2c;
+color:white;
+font-size:24px;
+padding:12px;
+border-radius:3px;
+cursor:pointer;
+}
+
+/* =========================
+   JURY VOTING CLEAN LAYOUT
+========================= */
+
+.jury-voting{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+/* Einzelne Karte */
+.jury-card{
+    flex:1 1 300px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:15px;
+    background:#fff;
+}
+
+/* Titel */
+.jury-card h3{
+    margin-top:0;
+}
+
+/* Audio Player */
+.jury-audio{
+    width:100%;
+    margin:10px 0;
+}
+
+/* Select */
+.jury-score{
+    width:100%;
+    padding:10px;
+    font-size:16px;
+}
+
+/* Jury Preselect */
+.jury-preselect{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.jury-card{
+	flex:1 1 300px;
+border:1px solid #ddd;
+padding:15px;
+
+}
+
+.jury-pick{
+background:#ccc;
+border:none;
+padding:10px;
+cursor:pointer;
+width:100%;
+}
+
+.jury-pick.active{
+background:#e99a2c;
+color:#fff;
+}
+/* =========================
+MOBILE OPTIMIZATION
+========================= */
+
+/* =========================
+   PUBLIC LEADERBOARD
+========================= */
+
+.scp-public-leaderboard{
+margin:20px 0;
+}
+
+.scp-charts{
+padding-left:20px;
+}
+
+.scp-charts li{
+margin-bottom:10px;
+font-size:18px;
+}
+
+.chart-name{
+font-weight:bold;
+}
+.rank-number{
+font-weight:bold;
+background:#e99a2c;
+color:#fff;
+border-radius:50%;
+border:2px solid;
+height:35px;
+width:35px;
+	padding:5px;
+/*vertical-align:middle;*/
+}
+
+.scp-viral-table{
+width:100% !important;
+align-self:center;
+border-collapse:collapse;
+margin-top:20px;
+}
+	
+.scp-viral-table tbody{
+width:100% !important;
+align-self:center;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+.scp-viral-table th,
+.scp-viral-table td{
+padding:10px;
+border:1px solid #ddd;
+text-align:left;
+}
+
+.scp-chart-cta{
+margin-top:30px;
+text-align:center;
+}
+
+/* MOBILE */
+
+@media(max-width:767px){
+
+.band-card{
+flex-direction:column;
+padding:15px;
+border-radius:0;
+}
+
+/* FULL WIDTH FIX*/
+.et_pb_row,
+.et_pb_section{
+max-width:100% !important;
+padding-left:10px !important;
+padding-right:10px !important;
+}
+
+.band-image img{
+width:100%;
+height:auto;
+max-height:250px;
+}
+
+.vote-bar{
+flex-direction:column;
+align-items:stretch;
+}
+
+.vote-btn{
+width:100%;
+padding:14px;
+}
+
+.scp-details-btn{
+width:100%;
+text-align:center;
+padding:14px;
+}
+
+.share-bar{
+flex-direction:column;
+}
+
+.share-bar a{
+display:block;
+padding:10px;
+background:#f5f5f5;
+border-radius:4px;
+text-align:center;
+}
+
+.jury-voting{
+flex-direction:column;
+}
+
+.jury-card{
+width:100%;
+}
+.share-bar{
+flex-direction:column;
+}
+
+.share-btn{
+width:100%;
+box-sizing:border-box;
+}
+	
+.scp-viral-table{
+font-size:14px;
+}
+
+.scp-viral-table th,
+.scp-viral-table td{
+padding:8px;
+}
+
+}
+/* =========================
+   Winner Page
+========================= */
+
+.winner-box{
+    text-align:center;
+    padding:40px;
+    border:2px solid #e99a2c;
+    border-radius:8px;
+    background:#fff9f0;
+    margin:20px 0;
+}
+
+.winner-image{
+    width:450px;
+    height:450px;
+    max-width:100%;
+    object-fit:cover;
+    border-radius:8px;
+    margin:0 auto 25px auto;
+    display:block;
+}
+
+.winner-song{
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.winner-stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin:25px 0;
+}
+
+.winner-stat{
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:6px;
+    padding:15px;
+}
+
+.winner-stat-label{
+    display:block;
+    font-size:14px;
+    color:#555;
+    margin-bottom:6px;
+}
+
+.winner-stat strong{
+    font-size:24px;
+    color:#e99a2c;
+}
+
+.winner-info{
+    max-width:800px;
+    margin:25px auto;
+    text-align:left;
+}
+
+.winner-audio audio{
+    width:100%;
+    max-width:600px;
+}
+
+@media(max-width:767px){
+
+    .winner-box{
+        padding:20px;
+    }
+
+    .winner-image{
+        width:100%;
+        height:auto;
+        aspect-ratio:1/1;
+    }
+
+    .winner-stat strong{
+        font-size:22px;
+    }
+}
+
+/* =========================
+   Application phase messages
+========================= */
+
+.scp-application-closed{
+    display:block;
+    text-align:center;
+    padding:30px;
+}
+
+.scp-application-closed p{
+    max-width:760px;
+    margin:12px auto;
+}
+
+.scp-application-countdown{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(90px,1fr));
+    gap:15px;
+    max-width:700px;
+    margin:25px auto 15px auto;
+}
+
+.scp-countdown-item{
+    padding:18px 12px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    background:#fff;
+}
+
+.scp-countdown-item strong{
+    display:block;
+    font-size:32px;
+    line-height:1.1;
+    color:#e99a2c;
+}
+
+.scp-countdown-item span{
+    display:block;
+    margin-top:7px;
+    font-size:14px;
+    color:#444;
+}
+
+.scp-countdown-label{
+    font-weight:600;
+}
+
+.scp-application-closed a{
+    color:#e99a2c;
+    font-weight:700;
+}
+
+@media(max-width:700px){
+
+    .scp-application-countdown{
+        grid-template-columns:repeat(2,minmax(100px,1fr));
+    }
+
+    .scp-countdown-item strong{
+        font-size:28px;
+    }
+}
+
+/* =========================================================
+   CONTEST RESULTS ARCHIVE – CARD LAYOUT
+========================================================= */
+
+.scp-results-archive{
+    width:100%;
+}
+
+.scp-result-contest{
+    margin:0 0 60px;
+}
+
+.scp-result-header{
+    margin:0 0 28px;
+    padding-bottom:12px;
+    border-bottom:2px solid #d4a437;
+}
+
+.scp-result-header h2{
+    margin:0;
+}
+
+.scp-result-group{
+    margin:36px 0;
+}
+
+.scp-result-group > h3{
+    margin:0 0 18px;
+}
+
+/* ---------------------------------------------------------
+   Gemeinsame Ergebniskarte
+--------------------------------------------------------- */
+
+.scp-result-card{
+    position:relative;
+    min-height:360px;
+    background-color:#1a1a1a;
+    background-size:cover;
+    background-position:center;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 18px rgba(0,0,0,.22);
+}
+
+.scp-result-card-overlay{
+    position:absolute;
+    right:0;
+    bottom:0;
+    left:0;
+    padding:18px;
+    color:#fff;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.98) 0%,
+        rgba(0,0,0,.86) 58%,
+        rgba(0,0,0,.20) 100%
+    );
+}
+
+.scp-result-card h3{
+    margin:7px 0 4px;
+    color:#fff;
+    font-size:23px;
+    line-height:1.2;
+}
+
+.scp-result-card-song{
+    margin:0 0 10px;
+    color:#fff;
+    font-weight:600;
+}
+
+.scp-result-card-contest{
+    display:inline-block;
+    padding:4px 9px;
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:999px;
+    background:rgba(16,37,63,.88);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+}
+
+.scp-result-card audio{
+    display:block;
+    width:100%;
+    height:40px;
+    margin-top:13px;
+}
+
+/* ---------------------------------------------------------
+   Platzierungsbadge
+--------------------------------------------------------- */
+
+.scp-result-card-badge{
+    position:absolute;
+    z-index:4;
+    top:15px;
+    right:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-width:50px;
+    height:42px;
+    padding:0 10px;
+    border:2px solid #fff;
+    border-radius:999px;
+    background:rgba(16,37,63,.94);
+    color:#fff;
+    font-size:16px;
+    font-weight:800;
+    box-shadow:0 3px 12px rgba(0,0,0,.35);
+}
+
+.scp-result-card-badge-winner{
+    width:68px;
+    height:68px;
+    min-width:68px;
+    padding:0;
+    border:4px solid #fff3bd;
+    border-radius:50%;
+    background:#d4a437;
+    color:#111;
+    font-size:34px;
+}
+
+/* ---------------------------------------------------------
+   Statistiken nur Winner + Finalisten
+--------------------------------------------------------- */
+
+.scp-result-stats{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:8px;
+    margin:12px 0 5px;
+}
+
+.scp-result-stat{
+    padding:8px 7px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:5px;
+    background:rgba(0,0,0,.42);
+}
+
+.scp-result-stat span,
+.scp-result-stat strong{
+    display:block;
+}
+
+.scp-result-stat span{
+    margin-bottom:2px;
+    color:#ddd;
+    font-size:11px;
+}
+
+.scp-result-stat strong{
+    color:#d4a437;
+    font-size:17px;
+}
+
+/* ---------------------------------------------------------
+   Platz 1 – groß hervorgehoben
+--------------------------------------------------------- */
+
+.scp-result-winner-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    max-width:900px;
+    margin:0 auto;
+}
+
+.scp-result-card-winner{
+    min-height:560px;
+    border:3px solid #d4a437;
+    box-shadow:0 8px 28px rgba(212,164,55,.28);
+}
+
+.scp-result-card-winner h3{
+    font-size:34px;
+}
+
+.scp-result-card-winner .scp-result-card-overlay{
+    padding:24px;
+}
+
+/* ---------------------------------------------------------
+   Plätze 2–5 – 2 x 2 Grid
+--------------------------------------------------------- */
+
+.scp-result-finalist-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:22px;
+}
+
+.scp-result-card-finalist{
+    min-height:440px;
+    outline:2px solid #10253f;
+    outline-offset:-2px;
+}
+
+/* ---------------------------------------------------------
+   Plätze 6–Top30 – 3 Spalten
+   Hinweis: 6–30 sind 25 Teilnehmer, daher entstehen bei
+   drei Spalten 9 Reihen (8 volle + eine einzelne Karte).
+--------------------------------------------------------- */
+
+.scp-result-top-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:18px;
+}
+
+.scp-result-card-top{
+    min-height:330px;
+}
+
+.scp-result-card-top h3{
+    font-size:20px;
+}
+
+/* ---------------------------------------------------------
+   Plätze > Top30 – bestehendes, optisch bewährtes 2er Grid
+--------------------------------------------------------- */
+
+.scp-result-participant-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:24px;
+}
+
+.scp-result-card-participant{
+    min-height:380px;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+
+@media(max-width:980px){
+
+    .scp-result-top-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .scp-result-stats{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+@media(max-width:700px){
+
+    .scp-result-finalist-grid,
+    .scp-result-top-grid,
+    .scp-result-participant-grid{
+        grid-template-columns:1fr;
+    }
+
+    .scp-result-card,
+    .scp-result-card-finalist,
+    .scp-result-card-top,
+    .scp-result-card-participant{
+        min-height:360px;
+    }
+
+    .scp-result-card-winner{
+        min-height:460px;
+    }
+
+    .scp-result-card-winner h3{
+        font-size:27px;
+    }
+
+    .scp-result-stats{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+}
+
+/* =========================================================
+   APPLICATION COUNTDOWN – ISOLATED LAYOUT FIX
+   Deliberately placed at the very end of the stylesheet.
+========================================================= */
+
+.band-bew-card.application-card.scp-application-closed{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+    text-align:center !important;
+    padding:30px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+}
+
+.band-bew-card.application-card.scp-application-closed > h2,
+.band-bew-card.application-card.scp-application-closed > p{
+    width:100% !important;
+    max-width:760px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    float:none !important;
+}
+
+.band-bew-card.application-card.scp-application-closed .scp-application-countdown{
+    display:grid !important;
+    grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+    grid-auto-flow:row !important;
+    align-items:stretch !important;
+    width:100% !important;
+    max-width:700px !important;
+    gap:15px !important;
+    margin:25px auto 15px auto !important;
+    padding:0 !important;
+    box-sizing:border-box !important;
+    float:none !important;
+}
+
+.band-bew-card.application-card.scp-application-closed .scp-countdown-item{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    min-width:0 !important;
+    width:100% !important;
+    min-height:100px !important;
+    box-sizing:border-box !important;
+    padding:18px 12px !important;
+    margin:0 !important;
+    border:1px solid #ddd !important;
+    border-radius:6px !important;
+    background:#fff !important;
+    float:none !important;
+}
+
+.band-bew-card.application-card.scp-application-closed .scp-countdown-item strong{
+    display:block !important;
+    margin:0 !important;
+    padding:0 !important;
+    font-size:32px !important;
+    line-height:1.1 !important;
+    color:#e99a2c !important;
+}
+
+.band-bew-card.application-card.scp-application-closed .scp-countdown-item span{
+    display:block !important;
+    margin:7px 0 0 0 !important;
+    padding:0 !important;
+    font-size:14px !important;
+    line-height:1.3 !important;
+    color:#444 !important;
+}
+
+.band-bew-card.application-card.scp-application-closed .scp-countdown-label{
+    display:block !important;
+    width:100% !important;
+    max-width:760px !important;
+    margin:12px auto !important;
+    font-weight:600 !important;
+    text-align:center !important;
+}
+
+@media(max-width:700px){
+
+    .band-bew-card.application-card.scp-application-closed{
+        padding:20px 10px !important;
+    }
+
+    .band-bew-card.application-card.scp-application-closed .scp-application-countdown{
+        grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+        gap:10px !important;
+        max-width:100% !important;
+    }
+
+    .band-bew-card.application-card.scp-application-closed .scp-countdown-item{
+        min-height:92px !important;
+        padding:15px 8px !important;
+    }
+
+    .band-bew-card.application-card.scp-application-closed .scp-countdown-item strong{
+        font-size:28px !important;
+    }
+}
+
+@media(max-width:380px){
+
+    .band-bew-card.application-card.scp-application-closed .scp-application-countdown{
+        grid-template-columns:1fr 1fr !important;
+    }
+
+    .band-bew-card.application-card.scp-application-closed .scp-countdown-item strong{
+        font-size:25px !important;
+    }
+}
+
+
+/* =========================================================
+   VOTER LOGIN / MAGIC LINK
+========================================================= */
+
+.scp-voter-status{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    width:100%;
+    box-sizing:border-box;
+    margin:0 auto 24px auto;
+    padding:14px 18px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:#fff;
+}
+
+.scp-voter-status > div{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.scp-voter-status strong{
+    display:block;
+}
+
+.scp-voter-status span{
+    display:block;
+    font-size:14px;
+    color:#555;
+}
+
+.scp-voter-status-ok{
+    border-color:#9ac69a;
+    background:#f5fbf5;
+}
+
+.scp-voter-status-info{
+    display:block;
+    text-align:center;
+}
+
+.scp-voter-logout{
+    flex:0 0 auto;
+    font-size:13px;
+    text-decoration:none;
+}
+
+.scp-voter-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.scp-voter-modal.is-open{
+    display:flex;
+}
+
+.scp-voter-modal-backdrop{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.68);
+}
+
+.scp-voter-modal-dialog{
+    position:relative;
+    z-index:2;
+    width:min(520px,100%);
+    box-sizing:border-box;
+    padding:28px;
+    border-radius:10px;
+    background:#fff;
+    box-shadow:0 20px 60px rgba(0,0,0,.28);
+}
+
+.scp-voter-modal-dialog h3{
+    margin:0 40px 10px 0;
+}
+
+.scp-voter-modal-dialog p{
+    margin:0 0 18px 0;
+}
+
+.scp-voter-modal-close{
+    position:absolute;
+    top:10px;
+    right:12px;
+    width:36px;
+    height:36px;
+    padding:0;
+    border:0;
+    background:transparent;
+    font-size:30px;
+    line-height:34px;
+    cursor:pointer;
+}
+
+#scp-voter-login-form{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+#scp-voter-login-form label{
+    font-weight:700;
+}
+
+#scp-voter-email{
+    width:100%;
+    box-sizing:border-box;
+    min-height:46px;
+    padding:10px 12px;
+    border:1px solid #bbb;
+    border-radius:5px;
+    background:#fff;
+    color:#222;
+    font-size:16px;
+}
+
+.scp-voter-submit{
+    min-height:46px;
+    margin-top:5px;
+    padding:10px 16px;
+    border:0;
+    border-radius:5px;
+    background:#e99a2c;
+    color:#fff;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.scp-voter-submit:disabled{
+    opacity:.65;
+    cursor:wait;
+}
+
+.scp-voter-form-message{
+    min-height:20px;
+    margin-top:5px;
+    font-size:14px;
+}
+
+.scp-voter-form-message.success{
+    color:#227322;
+}
+
+.scp-voter-form-message.error{
+    color:#a11;
+}
+
+.scp-voter-privacy{
+    margin-top:18px !important;
+    padding-top:14px;
+    border-top:1px solid #eee;
+    color:#666;
+    font-size:12px;
+}
+
+.scp-vote-btn.scp-vote-pending{
+    opacity:.65;
+}
+
+.scp-login-return-highlight{
+    outline:3px solid #e99a2c;
+    outline-offset:4px;
+    transition:outline-color .3s ease;
+}
+
+@media(max-width:600px){
+
+    .scp-voter-modal{
+        padding:12px;
+    }
+
+    .scp-voter-modal-dialog{
+        padding:22px 18px;
+    }
+
+    .scp-voter-status{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:10px;
+    }
+}
+
+/* Contest-Ablauf (dev7.6) */
+.scp-contest-schedule .scp-schedule-step{margin-top:32px}
+.scp-contest-schedule .scp-schedule-step:first-child{margin-top:0}
+.scp-contest-schedule .scp-schedule-step h3{margin:0 0 10px;padding:0}
+.scp-contest-schedule .scp-schedule-dates{margin:0 0 14px}
+.scp-contest-schedule .scp-schedule-step p:last-child{margin-bottom:0}
+
+/* Live Final-Voting */
+.scp-final-screen{margin:0;background:#090909;color:#fff;font-family:Arial,sans-serif}
+.scp-final-stage{min-height:100vh;box-sizing:border-box;padding:3vh 4vw;text-align:center}
+.scp-final-stage h1{font-size:clamp(28px,4vw,64px);margin:0 0 3vh}
+#scp-final-qr-grid{display:grid;grid-template-columns:repeat(5,minmax(180px,1fr));gap:2vw;align-items:start}
+.scp-final-qr-card{background:#fff;color:#111;border-radius:14px;padding:18px}
+.scp-final-qr-card h2{min-height:2.5em;margin:0 0 12px;font-size:clamp(18px,1.6vw,28px)}
+.scp-final-qr-card .qr img,.scp-final-qr-card .qr canvas{margin:auto;max-width:100%;height:auto!important}
+.scp-final-hint{font-size:clamp(18px,2vw,32px);margin-top:3vh}
+.scp-final-wait{display:flex;align-items:center;justify-content:center;min-height:55vh;font-size:clamp(28px,4vw,64px);font-weight:700}
+.scp-final-rank{display:flex;justify-content:space-between;align-items:center;margin:1.3vh auto;padding:1.4vh 2vw;max-width:1100px;border:2px solid #fff;font-size:clamp(28px,4vw,64px)}
+.scp-final-rank.revealed{background:#fff;color:#111}
+.scp-final-vote-page{min-height:100vh;padding:24px;background:#111;color:#fff;box-sizing:border-box}
+.scp-final-vote-box{max-width:520px;margin:40px auto;background:#fff;color:#111;padding:28px;border-radius:12px}
+.scp-final-vote-box label{display:block;font-weight:700}.scp-final-vote-box input{display:block;width:100%;box-sizing:border-box;padding:14px;margin:8px 0 18px;font-size:18px}.scp-final-vote-box button{width:100%;padding:15px;font-size:18px;font-weight:700;cursor:pointer}
+.scp-final-admin-actions{margin:18px 0 26px}.scp-final-admin-actions .button{margin:0 8px 8px 0}
+@media(max-width:1100px){#scp-final-qr-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){#scp-final-qr-grid{grid-template-columns:1fr}.scp-final-stage{padding:20px}}
+
+/* dev7.7.0 – Jury-Finalvoting */
+.scp-jury-band{margin-top:24px}.scp-jury-band label{display:grid;grid-template-columns:1fr 120px;gap:16px;align-items:center;margin:14px 0;font-weight:700}.scp-jury-band select{font-size:18px;padding:10px}.scp-jury-save-msg{margin-top:10px;font-weight:700}.scp-final-vote-box #scp-jury-qr{display:flex;justify-content:center;margin:20px auto}.scp-final-vote-box #scp-jury-qr img{margin:auto}
+@media(max-width:600px){.scp-jury-band label{grid-template-columns:1fr}.scp-jury-band select{width:100%}}
+
+
+/* dev7.8.0 – Festival UI */
+.scp-stage-control{max-width:1180px}.scp-stage-mode{display:inline-block;margin:8px 0 18px;padding:8px 14px;border-radius:999px;background:#173b22;color:#fff;font-weight:800;letter-spacing:.04em}.scp-stage-mode.is-test{background:#b32d2e}.scp-stage-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:0 0 20px}.scp-stage-step{background:#e7e7e7;border:1px solid #d0d0d0;border-radius:8px;padding:12px;display:flex;gap:10px;align-items:center;color:#555}.scp-stage-step span{width:30px;height:30px;border-radius:50%;background:#777;color:#fff;display:grid;place-items:center;font-weight:800}.scp-stage-step.active{background:#fff;border:2px solid #2271b1;color:#111}.scp-stage-step.active span{background:#2271b1}.scp-stage-step.done{background:#e9f6ec;color:#174b25}.scp-stage-step.done span{background:#21833b}.scp-stage-panel{background:#fff;border:1px solid #dcdcde;border-radius:10px;padding:20px;margin:0 0 18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}.scp-stage-panel h2{margin-top:0}.scp-jury-progress{margin-top:14px}.scp-internal-check{border-left:4px solid #dba617}
+.scp-jury-mobile-head{max-width:720px;margin:0 auto;padding:18px 20px;display:flex;justify-content:space-between;gap:14px;align-items:center}.scp-jury-mobile-head strong,.scp-jury-mobile-head span{display:block}.scp-jury-mobile-head strong{font-size:20px}.scp-jury-mobile-head span{opacity:.75;margin-top:4px}.scp-jury-progress-pill{background:#fff;color:#111;border-radius:999px;padding:10px 14px;white-space:nowrap;font-weight:700}.scp-jury-progressbar{height:7px;background:#333;max-width:680px;margin:0 auto 18px;border-radius:8px;overflow:hidden}.scp-jury-progressbar i{display:block;height:100%;background:#fff;transition:width .3s}.scp-jury-intro{max-width:680px;margin:0 auto 18px;text-align:center;color:#ddd}.scp-jury-band{max-width:680px;border-radius:18px;padding:24px;margin:18px auto 28px;scroll-margin-top:12px}.scp-jury-band-kicker{text-transform:uppercase;font-size:13px;font-weight:800;letter-spacing:.08em;color:#666}.scp-jury-band h2{font-size:30px;margin:5px 0}.scp-jury-whole{margin:0 0 20px;font-weight:700}.scp-jury-criterion{display:grid;grid-template-columns:1fr 92px;gap:16px;align-items:center;padding:14px 0;border-top:1px solid #e5e5e5}.scp-jury-criterion label{font-size:17px}.scp-jury-criterion small{display:block;font-weight:400;color:#666;line-height:1.35;margin-top:4px}.scp-jury-criterion select{width:92px;min-height:50px;font-size:22px;font-weight:800;text-align:center;border-radius:8px}.scp-jury-save-next{margin-top:18px;border:0;border-radius:10px;background:#111;color:#fff}.scp-jury-save-msg{min-height:24px;text-align:center}.scp-jury-save-msg.ok{color:#187a31}
+@media(max-width:782px){.scp-stage-steps{grid-template-columns:1fr}.scp-stage-step{padding:9px 12px}.scp-jury-mobile-head{align-items:flex-start}.scp-jury-progress-pill{font-size:13px}.scp-jury-band{margin:12px 12px 24px;padding:20px}.scp-jury-criterion{grid-template-columns:1fr 76px;gap:10px}.scp-jury-criterion select{width:76px}.scp-jury-band h2{font-size:26px}}
+
+/* dev7.8.1 – Festival-Cockpit Admin */
+.scp-stage-control{max-width:none!important;margin-right:20px}.scp-stage-control>h1{font-size:28px;font-weight:750;margin:20px 0 12px}.scp-stage-mode{display:flex!important;align-items:center;gap:12px;width:max-content;max-width:100%;padding:10px 16px!important}.scp-stage-mode strong{font-size:14px;letter-spacing:.08em}.scp-stage-mode span{font-size:13px;font-weight:600;opacity:.9;letter-spacing:0}.scp-stage-mode.is-test{box-shadow:0 0 0 3px rgba(179,45,46,.12)}.scp-stage-steps{gap:12px!important;margin:6px 0 22px!important}.scp-stage-step{min-height:62px;box-sizing:border-box;padding:14px 16px!important}.scp-stage-step strong{font-size:15px}.scp-stage-step.future{opacity:.55}.scp-stage-step.done strong:after{content:' ✓';color:#21833b}.scp-stage-panel{padding:22px!important}.scp-stage-status{display:flex;justify-content:space-between;gap:24px;align-items:center;border-left:5px solid #2271b1}.scp-stage-status>div:first-child strong{display:block;font-size:20px;margin-top:4px}.scp-stage-eyebrow{display:block;text-transform:uppercase;letter-spacing:.08em;font-size:11px;font-weight:800;color:#646970;margin-bottom:5px}.scp-final-admin-actions{margin:0!important;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.scp-final-admin-actions .button{margin:0!important}.scp-panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.scp-panel-heading h2{margin:2px 0 0!important;font-size:22px}.scp-status-badge,.scp-mini-status{display:inline-flex;align-items:center;border-radius:999px;background:#f0f0f1;padding:6px 10px;font-size:12px;font-weight:800}.scp-status-badge.running{background:#fff3cd;color:#6d5100}.scp-status-badge.done,.scp-mini-status.done{background:#e7f5ea;color:#176b2c}.scp-mini-status.waiting{background:#f6f7f7;color:#646970}.scp-jury-overview{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;margin:20px 0 14px;padding:16px;background:#f6f7f7;border-radius:8px}.scp-jury-overview strong{display:block;font-size:26px;line-height:1}.scp-jury-overview span{display:block;color:#646970;margin-top:5px}.scp-admin-progress{height:12px;background:#dcdcde;border-radius:999px;overflow:hidden}.scp-admin-progress i{display:block;height:100%;background:#2271b1;border-radius:999px;transition:width .25s}.scp-jury-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}.scp-jury-progress th:nth-child(2),.scp-jury-progress td:nth-child(2){width:130px}.scp-jury-progress th:nth-child(3),.scp-jury-progress td:nth-child(3){width:180px}.scp-reset-test{border-color:#b32d2e!important;color:#b32d2e!important}.scp-internal-check{margin-top:24px!important}.scp-internal-check h2{margin:2px 0 4px!important}
+@media(max-width:1100px){.scp-stage-steps{grid-template-columns:repeat(3,1fr)!important}.scp-stage-status{align-items:flex-start;flex-direction:column}.scp-final-admin-actions{justify-content:flex-start}}
+@media(max-width:782px){.scp-stage-control{margin-right:10px}.scp-stage-steps{grid-template-columns:1fr!important}.scp-stage-mode{width:auto}.scp-panel-heading{flex-direction:column}.scp-jury-overview{grid-template-columns:1fr}.scp-jury-progress th:nth-child(3),.scp-jury-progress td:nth-child(3){display:none}}
+
+
+/* dev7.8.2 – Festival Publikums-QR */
+.scp-final-qr-stage{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding:2.2vh 3vw 2.5vh;background:#070707 url("https://pro-bands.de/wp-content/uploads/2026/10/Neuendorf-Rockt-2027-–-Rockbuehne-und-Publikum.png") center center/cover no-repeat;overflow:hidden}
+.scp-final-qr-stage:before{content:"";position:absolute;inset:0;z-index:-2;background:rgba(0,0,0,.68)}
+.scp-final-qr-stage:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,.12) 48%,rgba(0,0,0,.64))}
+.scp-final-branding{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;width:100%;height:20vh;min-height:120px;max-height:220px;margin:0 auto 1.5vh}
+.scp-final-brand-logo{display:block;justify-self:center;max-width:100%;width:auto!important;height:auto!important;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(0,0,0,.65))}
+.scp-final-brand-neuendorf{grid-column:2;max-width:15vw;max-height:19vh}
+.scp-final-brand-contest{grid-column:4;max-width:18vw;max-height:17vh}
+.scp-final-qr-stage #scp-final-qr-grid{width:100%;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.35vw,28px);align-items:stretch}
+.scp-final-qr-stage .scp-final-qr-card{display:flex;flex-direction:column;justify-content:flex-start;min-width:0;padding:clamp(12px,1.2vw,22px);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.78)}
+.scp-final-qr-stage .scp-final-qr-card h2{display:flex;align-items:center;justify-content:center;min-height:2.6em;margin:0 0 10px;font-size:clamp(18px,1.45vw,28px);line-height:1.15}
+.scp-final-qr-stage .scp-final-qr-card .qr{display:flex;align-items:center;justify-content:center;flex:1}
+.scp-final-qr-stage .scp-final-qr-card .qr img,.scp-final-qr-stage .scp-final-qr-card .qr canvas{width:min(100%,220px)!important;height:auto!important;aspect-ratio:1/1}
+.scp-final-callout{margin:2.3vh auto 0;padding:10px 24px 12px;border-radius:14px;background:rgba(0,0,0,.58);text-shadow:0 2px 5px #000;backdrop-filter:blur(3px)}
+.scp-final-callout strong{display:block;font-size:clamp(24px,2.5vw,46px);line-height:1.05;letter-spacing:.035em}
+.scp-final-callout span{display:block;margin-top:5px;font-size:clamp(17px,1.55vw,29px)}
+@media (min-width:1500px) and (min-height:800px){.scp-final-qr-stage .scp-final-qr-card .qr img,.scp-final-qr-stage .scp-final-qr-card .qr canvas{width:min(100%,260px)!important}}
+@media(max-width:1100px){.scp-final-qr-stage{justify-content:flex-start;overflow:auto}.scp-final-branding{display:flex;justify-content:center;gap:36px;height:150px}.scp-final-qr-stage #scp-final-qr-grid{grid-template-columns:repeat(2,minmax(220px,1fr));max-width:850px;margin:auto}.scp-final-qr-stage .scp-final-qr-card:last-child{grid-column:1/-1;max-width:400px;width:100%;justify-self:center}}
+@media(max-width:600px){.scp-final-branding{display:flex;height:auto;min-height:0;flex-direction:column;gap:12px}.scp-final-brand-logo,.scp-final-brand-neuendorf,.scp-final-brand-contest{max-width:80vw;max-height:110px}.scp-final-qr-stage #scp-final-qr-grid{grid-template-columns:1fr;max-width:390px}.scp-final-qr-stage .scp-final-qr-card:last-child{grid-column:auto}.scp-final-callout{margin-bottom:20px}}
+
+/* dev7.8.5 – Festival Beamer / Live-Charts / Reveal */
+.scp-final-festival-stage{position:relative;isolation:isolate;display:flex;flex-direction:column;min-height:100vh;padding:1.2vh 3vw 3vh;background:#070707 url("https://pro-bands.de/wp-content/uploads/2026/10/Neuendorf-Rockt-2027-–-Rockbuehne-und-Publikum.png") center center/cover no-repeat;overflow:hidden}
+.scp-final-festival-stage:before{content:"";position:absolute;inset:0;z-index:-2;background:rgba(0,0,0,.74)}
+.scp-final-festival-stage:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.48),rgba(0,0,0,.24) 46%,rgba(0,0,0,.72))}
+.scp-final-live-branding{height:17vh;min-height:105px;max-height:185px;margin-bottom:0}
+.scp-final-live-branding .scp-final-brand-neuendorf{max-height:16vh}.scp-final-live-branding .scp-final-brand-contest{max-height:14.5vh}
+.scp-final-live-title{text-align:center;font-size:clamp(24px,2.2vw,42px);font-weight:900;letter-spacing:.13em;text-shadow:0 3px 10px #000;margin:-.3vh 0 1vh}
+#scp-final-live-content{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.scp-live-kicker{text-align:center;font-size:clamp(22px,2vw,38px);font-weight:900;letter-spacing:.14em;margin:0 0 1.4vh;text-shadow:0 3px 10px #000}
+.scp-live-ranking{width:min(1180px,88vw);margin:0 auto}
+.scp-final-festival-stage .scp-final-rank{max-width:none;margin:1vh auto;padding:1.05vh 2vw;border:2px solid rgba(255,255,255,.85);border-radius:12px;background:rgba(0,0,0,.56);box-shadow:0 8px 28px rgba(0,0,0,.32);font-size:clamp(26px,3.1vw,56px);line-height:1.05;backdrop-filter:blur(3px)}
+.scp-final-festival-stage .scp-final-rank strong{font-size:.9em;min-width:5ch;text-align:right}
+.scp-final-festival-stage .scp-final-rank.revealed{background:rgba(255,255,255,.94);color:#111;border-color:#fff}
+.scp-final-festival-stage .scp-final-rank.covered{color:#fff;background:rgba(0,0,0,.62)}
+.scp-final-festival-stage .scp-final-wait{min-height:42vh;width:min(1100px,86vw);margin:auto;text-align:center;font-size:clamp(30px,3.8vw,66px);line-height:1.15;text-shadow:0 3px 12px #000}
+.scp-winner-screen{width:min(1250px,90vw);margin:auto;text-align:center;padding:3vh 4vw 4vh;border:3px solid rgba(255,196,44,.92);border-radius:24px;background:radial-gradient(circle at 50% 30%,rgba(255,177,0,.28),rgba(0,0,0,.72) 58%);box-shadow:0 0 55px rgba(255,169,0,.34),0 14px 50px rgba(0,0,0,.5)}
+.scp-winner-kicker{font-size:clamp(18px,1.65vw,30px);font-weight:800;letter-spacing:.1em;color:#ffd45a}.scp-winner-place{font-size:clamp(34px,4.6vw,82px);font-weight:1000;letter-spacing:.08em;margin-top:1vh;color:#fff;text-shadow:0 4px 15px #000}.scp-winner-name{font-size:clamp(52px,7vw,126px);font-weight:1000;line-height:1;margin:1.5vh 0;color:#ffd24a;text-shadow:0 4px 18px #000}.scp-winner-score{font-size:clamp(28px,3.5vw,62px);font-weight:900;color:#fff}
+@media(max-width:900px){.scp-final-live-branding{height:120px;min-height:0}.scp-live-ranking{width:94vw}.scp-final-festival-stage .scp-final-rank{font-size:clamp(22px,5vw,42px)}}
+
+
+/* dev7.8.6 – Finalistenfotos in QR, Jury und Reveal */
+.scp-final-card-head{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;min-height:70px;margin-bottom:8px}
+.scp-final-qr-stage .scp-final-card-head h2{min-height:0!important;margin:0!important;justify-content:flex-start!important;text-align:left}
+.scp-final-band-thumb,.scp-final-band-placeholder{display:block;width:64px;height:64px;aspect-ratio:1/1;object-fit:cover;border-radius:9px;background:#1b1b1b;color:#fff;font-size:28px;font-weight:900;line-height:64px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.22)}
+.scp-jury-band-head{display:flex;align-items:center;gap:16px;margin:8px 0 10px}.scp-jury-band-head h2{margin:0!important}
+.scp-jury-band-photo{display:block;width:82px;height:82px;aspect-ratio:1/1;object-fit:cover;border-radius:12px;background:#222;color:#fff;font-size:34px;font-weight:900;line-height:82px;text-align:center;flex:0 0 auto;box-shadow:0 5px 16px rgba(0,0,0,.22)}
+.scp-final-festival-stage .scp-final-rank.revealed{display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:20px;min-height:96px;overflow:visible}
+.scp-reveal-photo{display:block;width:92px;height:92px;aspect-ratio:1/1;object-fit:cover;border:5px solid #fff;border-radius:8px;background:#222;color:#fff;font-size:36px;font-weight:900;line-height:82px;text-align:center;box-shadow:0 8px 22px rgba(0,0,0,.45);transform:rotate(-17deg);transform-origin:center}
+.scp-reveal-photo.pos-4,.scp-reveal-photo.pos-2{transform:rotate(17deg)}
+.scp-reveal-photo.pos-5,.scp-reveal-photo.pos-3{transform:rotate(-17deg)}
+.scp-winner-screen{position:relative;display:grid;grid-template-columns:minmax(210px,30%) 1fr;align-items:center;gap:2.5vw;text-align:left;overflow:visible}
+.scp-winner-photo-wrap{display:flex;align-items:center;justify-content:center;position:relative;z-index:2}
+.scp-winner-photo{display:block;width:min(26vw,340px);height:min(26vw,340px);aspect-ratio:1/1;object-fit:cover;border:8px solid #ffd24a;border-radius:14px;background:#222;color:#fff;font-size:110px;font-weight:1000;line-height:min(26vw,340px);text-align:center;box-shadow:0 0 34px rgba(255,190,30,.48),0 18px 38px rgba(0,0,0,.6);transform:rotate(-17deg);margin-left:-5vw}
+.scp-winner-copy{text-align:center;min-width:0}.scp-winner-name{font-size:clamp(44px,5.6vw,105px)}
+@media(max-width:900px){.scp-final-card-head{grid-template-columns:54px 1fr}.scp-final-band-thumb,.scp-final-band-placeholder{width:54px;height:54px;line-height:54px}.scp-final-festival-stage .scp-final-rank.revealed{grid-template-columns:72px 1fr auto;gap:12px}.scp-reveal-photo{width:68px;height:68px;line-height:58px}.scp-winner-screen{grid-template-columns:180px 1fr}.scp-winner-photo{width:210px;height:210px;line-height:210px;margin-left:-35px}}
+
+
+/* dev7.8.7 – Reveal-Fotos über Rahmen / Gewinnername breiter */
+.scp-winner-screen{
+  display:block;
+  position:relative;
+  overflow:visible;
+  padding:3vh 4vw 4vh;
+}
+.scp-winner-photo-wrap{
+  position:absolute;
+  left:-3.8vw;
+  top:-5.5vh;
+  width:min(24vw,330px);
+  height:min(24vw,330px);
+  z-index:3;
+  display:block;
+}
+.scp-winner-photo{
+  width:100%;
+  height:100%;
+  margin:0;
+  line-height:min(24vw,330px);
+  transform:rotate(-17deg);
+}
+.scp-winner-copy{
+  width:78%;
+  margin-left:22%;
+  text-align:center;
+  min-width:0;
+}
+.scp-winner-name{
+  font-size:clamp(42px,5vw,96px);
+  line-height:1.02;
+  white-space:nowrap;
+  overflow:visible;
+  letter-spacing:-.02em;
+}
+.scp-final-festival-stage .scp-final-rank.revealed{
+  position:relative;
+  grid-template-columns:74px 1fr auto;
+  padding-left:2.2vw;
+}
+.scp-final-festival-stage .scp-final-rank.revealed .scp-reveal-photo{
+  position:relative;
+  left:-2.6vw;
+  margin-right:-2vw;
+  z-index:2;
+}
+@media(max-width:900px){
+  .scp-winner-photo-wrap{left:-28px;top:-35px;width:205px;height:205px}
+  .scp-winner-photo{width:205px;height:205px;line-height:205px}
+  .scp-winner-copy{width:78%;margin-left:22%}
+  .scp-winner-name{font-size:clamp(34px,6.2vw,64px)}
+}
+
+
+/* =========================================================
+   BEWERBUNGSFORMULAR – Einwilligung Infos/Angebote (dev7.8.13)
+========================================================= */
+
+.contest-form .scp-consent{
+    margin:18px 0 8px;
+    text-align:left;
+}
+
+.contest-form .scp-consent-label{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    cursor:pointer;
+    line-height:1.45;
+}
+
+.contest-form .scp-consent-label input[type="checkbox"]{
+    flex:0 0 auto;
+    width:auto !important;
+    height:auto !important;
+    margin:4px 0 0 !important;
+}
+
+.contest-form .scp-consent-note{
+    margin:6px 0 0 28px;
+    font-size:.85em;
+    opacity:.8;
+}
+
+
+.contest-form .scp-privacy-notice{
+    margin:18px 0 0;
+    font-size:.88em;
+    line-height:1.5;
+    opacity:.9;
+    text-align:left;
+}
+/* dev7.8.23 – shared festival QR wall */
+.scp-final-display-title{text-align:center;display:flex;flex-direction:column;align-items:center;margin:-1vh auto 2vh;line-height:1;letter-spacing:.055em;text-shadow:0 4px 18px #000}
+.scp-final-display-title strong{font-size:clamp(32px,5vw,88px);font-weight:1000;color:#fff}
+.scp-final-display-title span{background:#d50930;color:white;padding:.3em 1.6em;transform:rotate(-2deg);font-weight:900;font-size:clamp(17px,2vw,34px);margin-top:.35em}
+.scp-fd-display .scp-final-qr-card{background:linear-gradient(165deg,#211b30,#090b1a 70%);color:white;border:2px solid #ad9ab9;overflow:hidden;padding:0 0 12px}
+.scp-fd-display .scp-final-card-head{display:flex;flex-direction:column;gap:0;margin:0 0 8px;min-height:0}
+.scp-fd-display .scp-final-band-thumb,.scp-fd-display .scp-final-band-placeholder{width:100%;height:clamp(90px,15vh,220px);border-radius:0;object-fit:cover;box-shadow:none}
+.scp-fd-display .scp-final-band-placeholder{line-height:clamp(90px,15vh,220px);text-align:center;font-size:60px}
+.scp-fd-display .scp-final-card-head h2{display:block!important;width:100%;min-height:0!important;margin:0!important;padding:10px 4px!important;text-align:center!important;font-size:clamp(17px,1.5vw,29px);background:linear-gradient(90deg,#a60035,#ef194f);color:#fff}
+.scp-fd-display .qr{padding:10px;background:#fff;border-radius:12px;margin:0 auto 10px;width:fit-content;max-width:94%}
+.scp-fd-display .scp-vote-cta{margin:auto 8px 0;padding:10px 4px;background:#b50032;color:white;border-radius:8px;font-size:clamp(10px,1vw,16px);font-weight:900;text-align:center}
+.scp-fd-display .scp-final-branding{height:clamp(70px,13vh,160px)}
+.scp-fd-display .scp-final-qr-card .qr canvas,.scp-fd-display .scp-final-qr-card .qr img{max-width:100%;height:auto!important}
+@media(max-width:1100px){.scp-fd-display #scp-final-qr-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-width:100%}.scp-fd-display .scp-final-qr-card:last-child{grid-column:auto;max-width:none}}
+@media(max-width:680px){.scp-fd-display #scp-final-qr-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scp-fd-display .scp-final-branding{height:auto}.scp-fd-display .scp-final-display-title{margin:10px auto 18px}}
+
+/* dev7.8.24 – QR wall: contained viewport, centered waiting text, adaptive header */
+html:has(.scp-fd-display),body.scp-final-screen:has(.scp-fd-display){margin:0!important;padding:0!important;width:100%;min-width:0;overflow-x:hidden;box-sizing:border-box}
+body.scp-final-screen:has(.scp-fd-display){background:#070707}
+.scp-final-qr-stage.scp-fd-display{box-sizing:border-box!important;width:100%!important;max-width:100vw!important;min-height:100vh!important;min-height:100dvh!important;height:auto;overflow-x:hidden!important;overflow-y:auto!important;padding:clamp(12px,2vh,26px) clamp(12px,2.5vw,48px) clamp(16px,2vh,30px)!important;display:grid!important;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr) auto;justify-items:stretch;align-items:center;align-content:space-between;gap:clamp(8px,1.4vh,18px);text-align:center}
+.scp-fd-display .scp-final-branding{display:flex!important;flex-direction:row!important;justify-content:space-between!important;align-items:center!important;gap:clamp(8px,3vw,60px)!important;min-height:0!important;max-height:none!important;height:auto!important;width:min(100%,1250px)!important;margin:0 auto!important}
+.scp-fd-display .scp-final-brand-logo,.scp-fd-display .scp-final-brand-neuendorf,.scp-fd-display .scp-final-brand-contest{grid-column:auto!important;display:block!important;max-width:min(35vw,250px)!important;max-height:clamp(58px,13vh,135px)!important;width:auto!important;height:auto!important;object-fit:contain}
+.scp-fd-display .scp-final-display-title{width:100%;min-width:0;margin:0 auto!important;gap:clamp(5px,1vh,14px);overflow:visible;line-height:1.06}
+.scp-fd-display .scp-final-display-title strong{font-size:clamp(30px,5.5vw,78px)!important;line-height:1.04;overflow-wrap:anywhere}
+.scp-fd-display .scp-final-display-title span{font-size:clamp(15px,2.1vw,29px)!important;max-width:calc(100% - 24px);box-sizing:border-box;padding:.35em 1.3em!important}
+.scp-fd-display #scp-final-qr-grid{width:100%!important;max-width:100%!important;min-width:0!important;margin:0 auto!important;display:grid;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:clamp(8px,1.2vw,22px)!important;align-items:stretch;justify-content:center}
+.scp-fd-display #scp-final-qr-grid:has(.scp-final-wait){display:flex!important;align-items:center!important;justify-content:center!important;min-height:clamp(150px,28vh,350px);max-width:100%!important}
+.scp-fd-display .scp-final-wait{display:block!important;position:static!important;transform:none!important;box-sizing:border-box;max-width:min(100%,1000px)!important;width:100%!important;margin:0 auto!important;padding:clamp(16px,3vw,40px)!important;text-align:center!important;overflow-wrap:break-word;word-break:normal;white-space:normal!important;font-size:clamp(22px,3.4vw,52px)!important;line-height:1.2!important}
+.scp-fd-display .scp-final-qr-card{width:100%;max-width:100%!important;min-width:0!important;box-sizing:border-box}
+.scp-fd-display .scp-final-band-thumb,.scp-fd-display .scp-final-band-placeholder{height:clamp(70px,14vh,175px)}
+.scp-fd-display .qr{box-sizing:border-box;width:min(100%,230px)!important;min-width:0!important;padding:clamp(5px,.65vw,10px)}
+.scp-fd-display .qr canvas,.scp-fd-display .qr img{width:100%!important;max-width:100%!important;height:auto!important;aspect-ratio:1}
+.scp-fd-display .scp-final-callout{box-sizing:border-box;width:fit-content;max-width:100%;margin:0 auto!important;padding:clamp(8px,1.2vh,14px) clamp(12px,2vw,30px)!important}
+.scp-fd-display .scp-final-callout strong{font-size:clamp(20px,2.6vw,42px)!important}
+.scp-fd-display .scp-final-callout span{font-size:clamp(12px,1.5vw,24px)!important}
+.scp-display-fullscreen{position:fixed;right:clamp(8px,1.2vw,22px);top:clamp(8px,1.2vh,18px);z-index:9999;background:rgba(0,0,0,.75);color:#fff;border:1px solid #fff8;border-radius:8px;padding:8px 12px;font:600 13px/1.2 sans-serif;cursor:pointer}
+@media(max-width:1000px){.scp-fd-display #scp-final-qr-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}.scp-fd-display .scp-final-qr-card:last-child{grid-column:auto!important}}
+@media(max-width:650px){.scp-fd-display #scp-final-qr-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.scp-fd-display .scp-final-brand-logo{max-height:80px!important}.scp-fd-display .scp-final-display-title strong{font-size:clamp(25px,8vw,48px)!important}.scp-fd-display .scp-final-wait{font-size:clamp(20px,5vw,34px)!important}}
+@media(max-height:650px) and (min-width:1000px){.scp-fd-display .scp-final-brand-logo{max-height:65px!important}.scp-fd-display .scp-final-display-title strong{font-size:clamp(27px,5vh,45px)!important}.scp-fd-display .scp-final-band-thumb{height:75px!important}.scp-fd-display .scp-final-callout span{display:none}}
+
+/* =========================================================
+   Phasen-Leiste [songcontest_phase_timeline]
+   Farben aus dem PRO-BANDS Child-Theme, mit Ersatzwerten
+   ========================================================= */
+.scp-timeline{
+    list-style:none !important;
+    margin:40px 0 0 !important;
+    padding:0 !important;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:0;
+}
+.scp-timeline__step{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding:22px 20px 22px 0 !important;
+    border-top:4px solid var(--pb-line,#2A2A2A);
+    margin:0 !important;
+}
+.scp-timeline__step::before{ display:none !important; }
+.scp-timeline__status{
+    font-family:var(--pb-font-body,'Barlow',sans-serif);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--pb-text-mute,#A39C8E);
+}
+.scp-timeline__title{
+    font-family:var(--pb-font-head,'Bebas Neue',Impact,sans-serif);
+    font-size:32px;
+    line-height:1;
+    color:var(--pb-text-soft,#CFC8BA);
+}
+.scp-timeline__date{
+    font-size:15px;
+    font-weight:600;
+    color:var(--pb-bone,#E8E2D6);
+}
+.scp-timeline__text{
+    font-size:15px;
+    line-height:1.45;
+    color:var(--pb-text-mute,#A39C8E);
+}
+.scp-timeline__step.is-done{ border-top-color:#5A554C; }
+.scp-timeline__step.is-done .scp-timeline__title{ color:var(--pb-text-mute,#A39C8E); }
+.scp-timeline__step.is-now{ border-top-color:var(--pb-rost,#C14A2A); }
+.scp-timeline__step.is-now .scp-timeline__status{ color:var(--pb-rost-text,#E0785A); }
+.scp-timeline__step.is-now .scp-timeline__title{ color:#FFFFFF; }
+.scp-timeline__step.is-next{ border-top-color:var(--pb-gold,#D4A437); }
+.scp-timeline__step.is-next .scp-timeline__status{ color:var(--pb-gold,#D4A437); }
+.scp-timeline__step.is-next .scp-timeline__title{ color:var(--pb-bone,#E8E2D6); }
+
+@media (max-width:767px){
+    .scp-timeline{ grid-template-columns:1fr; }
+    .scp-timeline__step{ padding:18px 0 18px 18px !important; border-top:0; border-left:4px solid var(--pb-line,#2A2A2A); }
+    .scp-timeline__step.is-done{ border-left-color:#5A554C; }
+    .scp-timeline__step.is-now{ border-left-color:var(--pb-rost,#C14A2A); }
+    .scp-timeline__step.is-next{ border-left-color:var(--pb-gold,#D4A437); }
+}
+
+/* =========================================================
+   Kompakter Countdown (.scp-cd)
+   ========================================================= */
+.scp-cd{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:10px 16px;
+    margin:18px 0 0;
+}
+.scp-cd__label{
+    font-family:var(--pb-font-body,'Barlow',sans-serif);
+    font-weight:700;
+    font-size:13px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:var(--pb-text-mute,#A39C8E);
+}
+.scp-cd__units{ display:inline-flex; gap:6px; }
+.scp-cd__unit{
+    display:inline-flex;
+    align-items:baseline;
+    gap:4px;
+    padding:6px 10px;
+    background:var(--pb-anthrazit,#1A1A1A);
+    border:1px solid var(--pb-line,#2A2A2A);
+    line-height:1;
+}
+.scp-cd__unit strong{
+    font-family:var(--pb-font-head,'Bebas Neue',Impact,sans-serif);
+    font-weight:400;
+    font-size:28px;
+    color:var(--pb-gold,#D4A437);
+    min-width:1.1em;
+    text-align:right;
+    font-variant-numeric:tabular-nums;
+}
+.scp-cd__unit small{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--pb-text-mute,#A39C8E);
+}
+/* Auf Rost-Flächen */
+.pb-section--rost .scp-cd__label{ color:#FBEDE6; }
+.pb-section--rost .scp-cd__unit{ background:rgba(11,11,11,.85); border-color:rgba(11,11,11,.85); }
+.pb-section--rost .scp-cd__unit strong{ color:#FFFFFF; }
+.pb-section--rost .scp-cd__unit small{ color:#E8E2D6; }
+@media (max-width:480px){
+    .scp-cd__unit{ padding:5px 8px; }
+    .scp-cd__unit strong{ font-size:24px; }
+}
+
+/* Buttons-Layout des Phasen-Banners (z. B. im Hero) */
+.scp-phase-buttons .pb-btn-group{ margin-top:32px; }
+.scp-phase-buttons .scp-cd{ margin-top:20px; }
