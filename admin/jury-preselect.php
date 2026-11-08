@@ -22,7 +22,7 @@ function scp_admin_jury_preselect_page(){
        MANUELL STATUS TOP20
     ========================= */
 
-    if(isset($_GET['set_top20'])){
+    if(isset($_GET['set_top20']) && check_admin_referer('scp_set_top20_'.intval($_GET['set_top20']))){
         $artist_id = intval($_GET['set_top20']);
         $belongs = intval($wpdb->get_var($wpdb->prepare(
             "SELECT COUNT(*) FROM $artists WHERE id=%d AND contest_id=%d",
@@ -36,7 +36,7 @@ function scp_admin_jury_preselect_page(){
         }
     }
 
-    if(isset($_GET['remove_top20'])){
+    if(isset($_GET['remove_top20']) && check_admin_referer('scp_remove_top20_'.intval($_GET['remove_top20']))){
         $artist_id = intval($_GET['remove_top20']);
         $belongs = intval($wpdb->get_var($wpdb->prepare(
             "SELECT COUNT(*) FROM $artists WHERE id=%d AND contest_id=%d",
@@ -113,9 +113,9 @@ function scp_admin_jury_preselect_page(){
 
         $base = admin_url('admin.php?page=songcontest-jury-preselect&contest_id='.intval($contest_id));
         if(!$isManualTop){
-            echo "<a class='button button-primary' href='".esc_url(add_query_arg('set_top20', intval($band->id), $base))."'>→ Fix in TOP".intval($limit)."</a>";
+            echo "<a class='button button-primary' href='".esc_url(wp_nonce_url(add_query_arg('set_top20', intval($band->id), $base), 'scp_set_top20_'.intval($band->id)))."'>→ Fix in TOP".intval($limit)."</a>";
         }else{
-            echo "<a class='button' href='".esc_url(add_query_arg('remove_top20', intval($band->id), $base))."'>TOP".intval($limit)." entfernen</a>";
+            echo "<a class='button' href='".esc_url(wp_nonce_url(add_query_arg('remove_top20', intval($band->id), $base), 'scp_remove_top20_'.intval($band->id)))."'>TOP".intval($limit)." entfernen</a>";
         }
         echo "</td></tr>";
         $rank++;

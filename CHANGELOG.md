@@ -1,3 +1,10 @@
+## 3.0.0-dev7.11.1
+- Sicherheit: „Löschen“ und „Freigeben“ unter Bewerbungen funktionierten über einfache Links ohne Sicherheitstoken. Ein präparierter Link (z. B. in einer E-Mail oder auf einer fremden Seite) hätte als angemeldeter Admin Bewerbungen löschen können. Jetzt nur noch mit gültigem Token (Nonce); ungültige Links zeigen einen Hinweis und tun nichts.
+- Sicherheit: Speichern im Bewerbungs-Editor, Speichern der E-Mail-Texte sowie „Fix in TOP“ / „TOP entfernen“ in der Jury-Vorauswahl ebenfalls nur noch mit Token.
+- Neu: Band-Profil-Seite liegt fest unter /contest/band/ (wird vor der Shortcode-Suche geprüft). Alte Links wie /song-contest-2026/band/?band=12 oder /band/?band=12 werden per 301 inkl. ?band= und ?ref= weitergeleitet; eine zweite Seite mit [songcontest_band_profile] ebenfalls.
+- Fix: Apostrophe wurden beim Speichern im Bewerbungs-Editor und bei den E-Mail-Texten mit Backslash gespeichert.
+- Keine Datenbankänderung.
+
 ## 3.0.0-dev7.11.0
 - Neu: Shortcode `[scp_home_teaser]` für die Startseite. Wechselt je nach Phase: Bewerbung (Zähler „X Bands im Rennen“ + neueste freigegebene Bewerber), Jury-Vorauswahl, Voting (Live-Charts Top 5 mit Bild, Votes und Balken), Auswertung (Endstand), Finale (Finalisten ohne Punktestand), Gewinner, Pause (letzter Gewinner). Countdown wie beim Phasen-Banner.
   Der wechselnde Teil wird nach dem Laden frisch über `/wp-json/scp/v1/home-teaser` geholt (Seiten-Cache spielt keine Rolle) und in der Voting-Phase alle 45 s aktualisiert. Serverseitig 30 s zwischengespeichert.

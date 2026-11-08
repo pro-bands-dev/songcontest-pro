@@ -24,7 +24,7 @@ function scp_public_page_definitions(){
         'contest'     => ['label' => 'Contest-Seite',        'path' => 'contest',                'shortcode' => ''],
         'application' => ['label' => 'Bewerbungsseite',      'path' => 'song-contest-bewerbung', 'shortcode' => 'songcontest_application'],
         'voting'      => ['label' => 'Voting-Seite',         'path' => 'voting',                 'shortcode' => 'songcontest_voting'],
-        'band'        => ['label' => 'Band-Profil-Seite',    'path' => '',                       'shortcode' => 'songcontest_band_profile'],
+        'band'        => ['label' => 'Band-Profil-Seite',    'path' => 'contest/band',           'shortcode' => 'songcontest_band_profile'],
         'jury'        => ['label' => 'Jury-Seite (Vorauswahl)', 'path' => 'jury-vorauswahl',     'shortcode' => 'songcontest_jury_preselect'],
     ];
 }
@@ -69,6 +69,13 @@ function scp_get_public_page_id($key){
     if(is_array($saved) && !empty($saved[$key])){
         $id = intval($saved[$key]);
         if($id > 0 && get_post_status($id) === 'publish') return $id;
+    }
+
+    // 2. Band-Profil: feste Adresse /contest/band/ hat Vorrang vor der Shortcode-Suche,
+    //    damit eine alte Seite (z. B. /song-contest-2026/band/) nicht mehr gewinnt.
+    if($key === 'band' && !empty($defs[$key]['path'])){
+        $page = get_page_by_path($defs[$key]['path']);
+        if($page && $page->post_status === 'publish') return intval($page->ID);
     }
 
     // 2a. Seite mit passendem Shortcode
@@ -119,7 +126,11 @@ add_action('trashed_post', 'scp_public_pages_flush_cache');
  */
 function scp_redirect_legacy_contest_urls(){
 
-    if(!is_404()) return;
+    // Alte Band-Profil-Links mit ?band= immer prüfen – WordPress liefert dort
+    // nicht zwingend 404 (z. B. wenn ein Medium „band“ heißt).
+    $is_band_link = isset($_GET['band']);
+
+    if(!is_404() && !$is_band_link) return;
 
     global $wpdb;
 
@@ -132,11 +143,20 @@ function scp_redirect_legacy_contest_urls(){
         $path = substr($path, strlen($home_path) + 1);
     }
 
-    $slugs = $wpdb->get_col("SELECT slug FROM {$wpdb->prefix}scp_contests WHERE slug <> ''");
-    if(empty($slugs)) return;
+    $slugs = (array) $wpdb->get_col("SELECT slug FROM {$wpdb->prefix}scp_contests WHERE slug <> ''");
 
     $target = '';
+
+    // Alte Band-Profil-Adressen (/band/, /<irgendwas>/band/) mit ?band=… → aktuelle Band-Profil-Seite
+    if(isset($_GET['band']) && ($path === 'band' || substr($path, -5) === '/band')){
+        $target = scp_get_public_page_url('band');
+    }
+
+    // Ab hier nur noch echte 404-Seiten (alte Contest-Adressen)
+    if(!$target && !is_404()) return;
+
     foreach($slugs as $slug){
+        if($target) break;
         $slug = sanitize_title($slug);
         if($path === $slug){
             $target = scp_get_public_page_url('contest');
@@ -150,6 +170,13 @@ function scp_redirect_legacy_contest_urls(){
 
     if(!$target) return;
 
+    // Keine Umleitung auf sich selbst
+    $target_path = trim((string) parse_url($target, PHP_URL_PATH), '/');
+    if($home_path !== '' && strpos($target_path, $home_path . '/') === 0){
+        $target_path = substr($target_path, strlen($home_path) + 1);
+    }
+    if($target_path === $path) return;
+
     // Parameter (z. B. ?band=12&ref=3) übernehmen
     if(!empty($_GET)){
         $args = array_map('sanitize_text_field', wp_unslash($_GET));
@@ -160,6 +187,40 @@ function scp_redirect_legacy_contest_urls(){
     exit;
 }
 add_action('template_redirect', 'scp_redirect_legacy_contest_urls', 5);
+
+
+/**
+ * Gibt es noch eine zweite (alte) Seite mit [songcontest_band_profile],
+ * z. B. /song-contest-2026/band/, wird sie per 301 auf die aktuelle
+ * Band-Profil-Seite (/contest/band/) umgeleitet – inkl. ?band= und ?ref=.
+ */
+function scp_redirect_duplicate_band_page(){
+
+    if(!is_page() || is_admin()) return;
+
+    $current = get_queried_object();
+    if(!($current instanceof WP_Post)) return;
+
+    $band_id = scp_get_public_page_id('band');
+    if(!$band_id || intval($current->ID) === $band_id) return;
+
+    if(strpos((string) $current->post_content, '[songcontest_band_profile') === false) return;
+
+    // Im Divi-Builder / in der Vorschau nicht umleiten
+    if(isset($_GET['et_fb']) || isset($_GET['preview']) || is_preview()) return;
+
+    $target = get_permalink($band_id);
+    if(!$target) return;
+
+    if(!empty($_GET)){
+        $args = array_map('sanitize_text_field', wp_unslash($_GET));
+        $target = add_query_arg($args, $target);
+    }
+
+    wp_safe_redirect($target, 301);
+    exit;
+}
+add_action('template_redirect', 'scp_redirect_duplicate_band_page', 6);
 
 
 /* =========================================================

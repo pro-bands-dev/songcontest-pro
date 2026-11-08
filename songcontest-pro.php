@@ -2,7 +2,7 @@
 /*
 Plugin Name: Song Contest PRO
 Description: Komplettes Song Contest System mit Bewerbungen, Voting, Jury Voting, Live Ranking und Gewinnerseite
-Version: 3.0.0-dev7.11.0
+Version: 3.0.0-dev7.11.1
 Author: PRO-BANDS Tonstudio
 Author URI: https://pro-bands.de/
 */
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) exit;
 // PATHS
 define("SCP_PATH", plugin_dir_path(__FILE__));
 define("SCP_URL", plugin_dir_url(__FILE__));
-define("SCP_VERSION", "3.0.0-dev7.11.0");
+define("SCP_VERSION", "3.0.0-dev7.11.1");
 define("SCP_DB_VERSION", "3.0.0-dev7.8.16");
 
 // INSTALL

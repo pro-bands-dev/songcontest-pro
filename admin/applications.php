@@ -20,8 +20,26 @@ function scp_applications_page(){
         'withdrawn' => 'Zurückgezogen'
     ];
 
+    if(!current_user_can('manage_options')){
+        wp_die('Keine Berechtigung.');
+    }
+
+    /*
+     * Sicherheit: Freigeben, Löschen und Speichern nur mit gültigem
+     * Sicherheitstoken (Nonce). Ein fremder Link oder ein verstecktes
+     * Formular auf einer anderen Website kann so nichts mehr auslösen.
+     */
+    $scp_action_ok = function($action, $id){
+        $nonce = isset($_REQUEST['_scpnonce']) ? sanitize_text_field(wp_unslash($_REQUEST['_scpnonce'])) : '';
+        if(wp_verify_nonce($nonce, 'scp_app_'.$action.'_'.intval($id))){
+            return true;
+        }
+        echo "<div class='notice notice-error'><p>Der Link ist abgelaufen oder ungültig. Bitte die Seite neu laden und noch einmal versuchen.</p></div>";
+        return false;
+    };
+
     /* FREIGEBEN */
-    if(isset($_GET['approve'])){
+    if(isset($_GET['approve']) && $scp_action_ok('approve', intval($_GET['approve']))){
         $id = intval($_GET['approve']);
         $wpdb->update(
             $table,
@@ -31,7 +49,7 @@ function scp_applications_page(){
     }
 
     /* LÖSCHEN */
-    if(isset($_GET['delete'])){
+    if(isset($_GET['delete']) && $scp_action_ok('delete', intval($_GET['delete']))){
         $id = intval($_GET['delete']);
         $wpdb->delete(
             $table,
@@ -40,7 +58,7 @@ function scp_applications_page(){
     }
 
     /* UPDATE SPEICHERN */
-    if(isset($_POST['update_band'])){
+    if(isset($_POST['update_band']) && $scp_action_ok('update', intval($_POST['id'] ?? 0))){
 
         $new_status = sanitize_key($_POST['status'] ?? 'pending');
 
@@ -51,19 +69,19 @@ function scp_applications_page(){
         $wpdb->update(
             $table,
             [
-                'name'=>sanitize_text_field($_POST['name']),
-                'email'=>sanitize_email($_POST['email']),
-                'title'=>sanitize_text_field($_POST['title']),
-                'genre'=>sanitize_text_field($_POST['genre']),
-                'length'=>sanitize_text_field($_POST['length']),
-                'band_info'=>sanitize_textarea_field($_POST['band_info']),
-                'song_info'=>sanitize_textarea_field($_POST['song_info']),
-                'contact'=>sanitize_text_field($_POST['contact']),
-                'instagram'=>sanitize_text_field($_POST['instagram']),
-                'facebook'=>sanitize_text_field($_POST['facebook']),
-                'website'=>sanitize_text_field($_POST['website']),
-                'image'=>esc_url_raw($_POST['image']),
-                'audio'=>esc_url_raw($_POST['audio']),
+                'name'=>sanitize_text_field(wp_unslash($_POST['name'] ?? '')),
+                'email'=>sanitize_email(wp_unslash($_POST['email'] ?? '')),
+                'title'=>sanitize_text_field(wp_unslash($_POST['title'] ?? '')),
+                'genre'=>sanitize_text_field(wp_unslash($_POST['genre'] ?? '')),
+                'length'=>sanitize_text_field(wp_unslash($_POST['length'] ?? '')),
+                'band_info'=>sanitize_textarea_field(wp_unslash($_POST['band_info'] ?? '')),
+                'song_info'=>sanitize_textarea_field(wp_unslash($_POST['song_info'] ?? '')),
+                'contact'=>sanitize_text_field(wp_unslash($_POST['contact'] ?? '')),
+                'instagram'=>sanitize_text_field(wp_unslash($_POST['instagram'] ?? '')),
+                'facebook'=>sanitize_text_field(wp_unslash($_POST['facebook'] ?? '')),
+                'website'=>sanitize_text_field(wp_unslash($_POST['website'] ?? '')),
+                'image'=>esc_url_raw(wp_unslash($_POST['image'] ?? '')),
+                'audio'=>esc_url_raw(wp_unslash($_POST['audio'] ?? '')),
                 'status'=>$new_status
             ],
             [
@@ -107,6 +125,7 @@ function scp_applications_page(){
             <form method="post">
 
                 <input type="hidden" name="id" value="<?php echo intval($band->id); ?>">
+                <input type="hidden" name="_scpnonce" value="<?php echo esc_attr(wp_create_nonce('scp_app_update_'.intval($band->id))); ?>">
                 <input type="hidden" name="contest_id" value="<?php echo intval($contest_id); ?>">
 
                 <table class="form-table">
@@ -399,12 +418,12 @@ function scp_applications_page(){
         echo "<td>";
 
         if($r->status === 'pending'){
-            echo "<a class='button' href='?page=songcontest-applications&contest_id=".$contest_id."&approve=".$r->id."'>Freigeben</a> ";
+            echo "<a class='button' href='?page=songcontest-applications&contest_id=".$contest_id."&approve=".$r->id."&_scpnonce=".wp_create_nonce('scp_app_approve_'.intval($r->id))."'>Freigeben</a> ";
         }
 
         echo "<a class='button' href='?page=songcontest-applications&contest_id=".$contest_id."&edit=".$r->id."'>Bearbeiten</a> ";
 
-        echo "<a class='button' style='background:#d63638;color:white' href='?page=songcontest-applications&contest_id=".$contest_id."&delete=".$r->id."' onclick='return confirm(\"Bewerbung löschen?\")'>Löschen</a>";
+        echo "<a class='button' style='background:#d63638;color:white' href='?page=songcontest-applications&contest_id=".$contest_id."&delete=".$r->id."&_scpnonce=".wp_create_nonce('scp_app_delete_'.intval($r->id))."' onclick='return confirm(\"Bewerbung löschen?\")'>Löschen</a>";
 
         echo "</td>";
         echo "</tr>";

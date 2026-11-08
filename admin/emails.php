@@ -1,13 +1,18 @@
 <?php
 function scp_email_settings_page(){
 
-if(isset($_POST['save_emails'])){
-update_option('scp_mail_application', wp_kses_post($_POST['mail_application']));
-update_option('scp_mail_voting', wp_kses_post($_POST['mail_voting']));
-update_option('scp_mail_final', wp_kses_post($_POST['mail_final']));
-update_option('scp_mail_winner', wp_kses_post($_POST['mail_winner']));
+if(!current_user_can('manage_options')){
+wp_die('Keine Berechtigung.');
+}
+
+// Sicherheit: Speichern nur mit gültigem Sicherheitstoken (Nonce).
+if(isset($_POST['save_emails']) && check_admin_referer('scp_save_emails', '_scpnonce')){
+update_option('scp_mail_application', wp_kses_post(wp_unslash($_POST['mail_application'] ?? '')));
+update_option('scp_mail_voting', wp_kses_post(wp_unslash($_POST['mail_voting'] ?? '')));
+update_option('scp_mail_final', wp_kses_post(wp_unslash($_POST['mail_final'] ?? '')));
+update_option('scp_mail_winner', wp_kses_post(wp_unslash($_POST['mail_winner'] ?? '')));
 if(isset($_POST['mail_marketing_optin'])){
-update_option('scp_mail_marketing_optin', wp_kses_post($_POST['mail_marketing_optin']));
+update_option('scp_mail_marketing_optin', wp_kses_post(wp_unslash($_POST['mail_marketing_optin'])));
 }
 echo "<div class='updated'><p>E-Mail Texte gespeichert.</p></div>";
 }
@@ -15,6 +20,7 @@ echo "<div class='updated'><p>E-Mail Texte gespeichert.</p></div>";
 <div class="wrap">
 <h1>Song Contest – E-Mail Einstellungen</h1>
 <form method="post">
+<?php wp_nonce_field('scp_save_emails', '_scpnonce'); ?>
 <h2>Bewerbungsbestätigung</h2>
 <textarea name="mail_application" rows="8" style="width:100%;">
 <?php echo esc_textarea(get_option('scp_mail_application')); ?>
