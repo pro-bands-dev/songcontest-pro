@@ -827,3 +827,86 @@
 @media (prefers-reduced-motion: reduce) {
     .band-highlight, .vote-plus { animation: none; }
 }
+
+/* ---------------------------------------------------------
+   Startseiten-Teaser [scp_home_teaser]
+   --------------------------------------------------------- */
+.scp-home-teaser { color: var(--scp-text); font-family: var(--scp-body); box-sizing: border-box; }
+.scp-home-teaser *, .scp-home-teaser *::before, .scp-home-teaser *::after { box-sizing: border-box; }
+.scp-home-teaser a { text-decoration: none; }
+
+.scp-ht-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px 32px; }
+.scp-ht-head__text { flex: 1 1 420px; min-width: 0; }
+.scp-ht-head__cd .scp-cd { margin: 0; }
+.scp-ht-eyebrow { margin: 0 0 6px !important; padding: 0 !important; }
+.scp-ht-title { margin: 0 0 8px !important; padding: 0 !important; font-family: var(--scp-head); }
+.scp-ht-text { margin: 0 !important; padding: 0 !important; color: var(--scp-soft); }
+
+.scp-ht-body { margin-top: 28px; }
+.scp-home-teaser.is-updated .scp-ht-body { animation: scp-ht-flash 1.2s ease; }
+@keyframes scp-ht-flash { 0% { opacity: .55; } 100% { opacity: 1; } }
+
+.scp-ht-stat { margin: 0 0 6px !important; padding: 0 !important; font-size: 18px; color: var(--scp-soft); }
+.scp-ht-stat strong { font-family: var(--scp-head); font-size: 44px; line-height: 1; color: var(--scp-gold); margin-right: 6px; vertical-align: -4px; }
+.scp-ht-sub { margin: 14px 0 0 !important; padding: 0 !important; font-size: 14px; color: var(--scp-mute); text-transform: uppercase; letter-spacing: .08em; }
+.scp-ht-body .scp-ht-sub:first-child { margin-top: 0 !important; }
+
+/* Band-Karten */
+.scp-ht-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 18px; margin-top: 14px; }
+.scp-ht-card { display: flex; flex-direction: column; background: var(--scp-bg); border: 1px solid var(--scp-line); color: var(--scp-text) !important; transition: border-color .2s ease, transform .2s ease; }
+a.scp-ht-card:hover { border-color: var(--scp-gold); transform: translateY(-2px); }
+.scp-ht-card__media { position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden; background: var(--scp-bg-deep); }
+.scp-ht-img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.scp-ht-img--empty { display: flex; align-items: center; justify-content: center; font-family: var(--scp-head); font-size: 56px; color: var(--scp-mute); background: var(--scp-bg-deep); }
+.scp-ht-card__body { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; }
+.scp-ht-card__name { font-family: var(--scp-head); font-size: 24px; line-height: 1.1; font-weight: normal; }
+.scp-ht-card__meta { font-size: 14px; color: var(--scp-gold); }
+.scp-ht-card__info { font-size: 14px; line-height: 1.45; color: var(--scp-mute); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+.scp-ht-badge { position: absolute; top: 10px; left: 10px; padding: 3px 9px; background: var(--scp-rost); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.scp-ht-badge--gold { left: auto; right: 12px; top: 12px; width: 40px; height: 40px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--scp-gold); color: var(--scp-bg-deep); font-family: var(--scp-head); font-size: 24px; }
+
+/* Live-Charts */
+.scp-ht-chart { list-style: none !important; margin: 0 !important; padding: 0 !important; display: flex; flex-direction: column; gap: 8px; }
+.scp-ht-row { display: grid; grid-template-columns: 34px 56px 1fr auto; align-items: center; gap: 14px; margin: 0 !important; padding: 8px 14px 8px 8px !important; background: var(--scp-bg); border: 1px solid var(--scp-line); }
+.scp-ht-row.is-first { border-color: var(--scp-gold); }
+.scp-ht-row__pos { font-family: var(--scp-head); font-size: 30px; line-height: 1; text-align: center; color: var(--scp-mute); }
+.scp-ht-row.is-first .scp-ht-row__pos { color: var(--scp-gold); }
+.scp-ht-row__img { width: 56px; height: 56px; font-size: 26px; }
+.scp-ht-row__main { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.scp-ht-row__name { font-family: var(--scp-head); font-size: 22px; line-height: 1.1; color: var(--scp-text) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+a.scp-ht-row__name:hover { color: var(--scp-gold) !important; }
+.scp-ht-bar { display: block; height: 4px; background: var(--scp-line); }
+.scp-ht-bar span { display: block; height: 100%; background: var(--scp-gold); transition: width .8s ease; }
+.scp-ht-row__votes { font-size: 13px; color: var(--scp-mute); text-align: right; white-space: nowrap; }
+.scp-ht-row__votes strong { display: block; font-family: var(--scp-head); font-size: 26px; line-height: 1; color: var(--scp-text); font-weight: normal; }
+span.scp-ht-live { color: var(--scp-rost); font-weight: 700; }
+span.scp-ht-live::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--scp-rost); vertical-align: 1px; animation: scp-ht-pulse 1.6s ease infinite; }
+@keyframes scp-ht-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+/* Gewinner */
+.scp-ht-winner { display: flex; flex-wrap: wrap; align-items: center; gap: 24px; }
+.scp-ht-winner__media { position: relative; display: block; flex: 0 0 auto; width: 220px; max-width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border: 2px solid var(--scp-gold); }
+.scp-ht-winner__body { display: flex; flex-direction: column; gap: 6px; }
+.scp-ht-winner__body .scp-ht-sub { margin: 0 !important; }
+.scp-ht-winner__name { font-family: var(--scp-head); font-size: 44px; line-height: 1; font-weight: normal; }
+.scp-ht-link { color: var(--scp-gold) !important; font-weight: 600; }
+
+.scp-ht-buttons { margin-top: 28px; flex-wrap: wrap; }
+
+@media (max-width: 600px) {
+    .scp-ht-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .scp-ht-card__info { display: none; }
+    .scp-ht-card__name { font-size: 20px; }
+    .scp-ht-row { grid-template-columns: 26px 44px 1fr auto; gap: 10px; }
+    .scp-ht-row__img { width: 44px; height: 44px; }
+    .scp-ht-row__pos { font-size: 24px; }
+    .scp-ht-row__name { white-space: normal; font-size: 19px; }
+    .scp-ht-row__votes { font-size: 11px; }
+}
+
+/* Bewerbungsformular: Status der WAV→MP3-Umwandlung */
+.scp-audio-status { margin: 6px 0 14px !important; font-size: 14px; color: var(--scp-soft); }
+.scp-audio-status--busy { color: var(--scp-gold); }
+.scp-audio-status--ok { color: #7FBF7F; }
+.scp-audio-status--error { color: var(--scp-rost); font-weight: 600; }

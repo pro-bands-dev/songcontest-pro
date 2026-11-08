@@ -2,7 +2,7 @@
 /*
 Plugin Name: Song Contest PRO
 Description: Komplettes Song Contest System mit Bewerbungen, Voting, Jury Voting, Live Ranking und Gewinnerseite
-Version: 3.0.0-dev7.10.1
+Version: 3.0.0-dev7.11.0
 Author: PRO-BANDS Tonstudio
 Author URI: https://pro-bands.de/
 */
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) exit;
 // PATHS
 define("SCP_PATH", plugin_dir_path(__FILE__));
 define("SCP_URL", plugin_dir_url(__FILE__));
-define("SCP_VERSION", "3.0.0-dev7.10.1");
+define("SCP_VERSION", "3.0.0-dev7.11.0");
 define("SCP_DB_VERSION", "3.0.0-dev7.8.16");
 
 // INSTALL
@@ -29,6 +29,7 @@ require_once SCP_PATH."includes/marketing-consent.php";
 require_once SCP_PATH."includes/privacy-retention.php";
 require_once SCP_PATH."includes/scheduler.php";
 require_once SCP_PATH."includes/referral-tracking.php";
+require_once SCP_PATH."includes/media.php";
 require_once SCP_PATH."includes/jury-preselect.php";
 require_once SCP_PATH."includes/jury-role.php";
 require_once SCP_PATH."includes/voter-auth.php";
@@ -65,6 +66,7 @@ require_once SCP_PATH."public/phase-timeline.php";
 require_once SCP_PATH."public/band-profile.php";
 require_once SCP_PATH."public/results.php";
 require_once SCP_PATH."public/final-voting.php";
+require_once SCP_PATH."public/home-teaser.php";
 
 
 

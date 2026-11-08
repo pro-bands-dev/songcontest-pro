@@ -53,7 +53,7 @@ function scp_render_band_card(
 
         $html .= "
             <img
-                src='".esc_url($band->image)."'
+                src='".esc_url(scp_image_url($band->image,'500'))."'
                 alt='".esc_attr($band->name)."'
             >";
     }
@@ -203,7 +203,7 @@ function scp_render_band_card($band,$rank,$allow_vote=true){
         <div class='band-image'>";
 
     if(!empty($band->image)){
-        $html .= "<img src='".esc_url($band->image)."' alt='".esc_attr($band->name)."'>";
+        $html .= "<img src='".esc_url(scp_image_url($band->image,'500'))."' alt='".esc_attr($band->name)."'>";
     }
 
     $html .= "</div>

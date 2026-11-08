@@ -62,6 +62,6 @@ function scp_fd_data(){
  global $wpdb;$s=$wpdb->get_row($wpdb->prepare("SELECT * FROM {$wpdb->prefix}scp_final_sessions WHERE id=%d AND contest_id=%d",$sid,$cid));
  if(!$s)wp_send_json_error(['message'=>'Session ungültig'],404);
  if($s->status!=='running')wp_send_json_success(['active'=>false,'message'=>in_array($s->status,['stopped','revealed'],true)?'DIE ABSTIMMUNG IST BEENDET':'DAS PUBLIKUMSVOTING IST NOCH NICHT GESTARTET']);
- $out=[];foreach(scp_finalists($s) as $a){$url=scp_fd_link('vote',$cid,['sid'=>$sid,'artist'=>(int)$a->id,'token'=>scp_final_token($sid,(int)$a->id)]);$out[]=['name'=>$a->name,'image'=>(string)($a->image??''),'url'=>$url];}
+ $out=[];foreach(scp_finalists($s) as $a){$url=scp_fd_link('vote',$cid,['sid'=>$sid,'artist'=>(int)$a->id,'token'=>scp_final_token($sid,(int)$a->id)]);$out[]=['name'=>$a->name,'image'=>scp_image_url((string)($a->image??''),'250'),'url'=>$url];}
  wp_send_json_success(['active'=>true,'artists'=>$out]);
 }

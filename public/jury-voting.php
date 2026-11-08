@@ -119,7 +119,7 @@ function scp_jury_voting($atts = []){
 
             $html .= "
             <div class='jury-image'>
-                <img src='".esc_url($band->image)."'
+                <img src='".esc_url(scp_image_url($band->image,'500'))."'
                      alt='".esc_attr($band->name)."'>
             </div>";
         }

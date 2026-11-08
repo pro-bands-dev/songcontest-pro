@@ -105,7 +105,7 @@ function scp_band_grid($atts = []) {
     foreach ($rows as $row) {
 
         $image = !empty($row->image)
-            ? esc_url($row->image)
+            ? esc_url(scp_image_url($row->image, '500'))
             : '';
 
         $contest_label = "Contest #" . intval($row->contest_id);

@@ -61,7 +61,7 @@ function scp_results_render_contest($contest){
         $html .= "<article class='scp-result-featured scp-result-winner'>";
 
         if(!empty($row->image_url)){
-            $html .= "<img src='".esc_url($row->image_url)."' alt='".esc_attr($row->artist_name)."'>";
+            $html .= "<img src='".esc_url(scp_image_url($row->image_url,'500'))."' alt='".esc_attr($row->artist_name)."'>";
         }
 
         $html .= "<div class='scp-result-featured-content'>";
@@ -88,7 +88,7 @@ function scp_results_render_contest($contest){
             $html .= "<article class='scp-result-finalist'>";
 
             if(!empty($row->image_url)){
-                $html .= "<img src='".esc_url($row->image_url)."' alt='".esc_attr($row->artist_name)."'>";
+                $html .= "<img src='".esc_url(scp_image_url($row->image_url,'500'))."' alt='".esc_attr($row->artist_name)."'>";
             }
 
             $html .= "<div class='scp-result-finalist-content'>";

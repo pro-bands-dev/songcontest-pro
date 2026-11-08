@@ -1,3 +1,14 @@
+## 3.0.0-dev7.11.0
+- Neu: Shortcode `[scp_home_teaser]` für die Startseite. Wechselt je nach Phase: Bewerbung (Zähler „X Bands im Rennen“ + neueste freigegebene Bewerber), Jury-Vorauswahl, Voting (Live-Charts Top 5 mit Bild, Votes und Balken), Auswertung (Endstand), Finale (Finalisten ohne Punktestand), Gewinner, Pause (letzter Gewinner). Countdown wie beim Phasen-Banner.
+  Der wechselnde Teil wird nach dem Laden frisch über `/wp-json/scp/v1/home-teaser` geholt (Seiten-Cache spielt keine Rolle) und in der Voting-Phase alle 45 s aktualisiert. Serverseitig 30 s zwischengespeichert.
+  Attribute: `title`, `count` (4), `top` (5), `status` (`approved`|`all`), `refresh` (45), `hide_closed`. Testen mit `?testphase=…`.
+- Neu: Bandfotos werden beim Upload nicht mehr auf 400 px verkleinert. Das Original bleibt erhalten (Band-Profil, Gewinnerseite); zusätzlich entstehen `…-scp500.jpg` (500 × 500) und `…-scp250.jpg` (250 × 250), mittig zugeschnitten.
+  Voting-Liste, Jury, Band-Grid, Ergebnis-Archiv und Finale nutzen 500 × 500, Backend-Listen und QR-Karten 250 × 250. Fehlt eine Version, wird das Original gezeigt.
+- Neu: Backend „Song Contest → Bildversionen“ erzeugt die Versionen für vorhandene Bewerbungen. Beim Ändern des Bildes im Bewerbungs-Editor werden sie automatisch erzeugt.
+- Neu: WAV-Dateien werden im Browser der Band vor dem Upload in MP3 (192 kbit/s) umgewandelt (LAME, `assets/vendor/lame.min.js`, LGPL). Gespeichert wird nur die MP3. Der Server nimmt nur noch MP3 an; nach einem Fehler bleiben die Formulareingaben erhalten.
+- Fix: Apostrophe und Anführungszeichen im Bewerbungsformular wurden mit Backslash gespeichert (z. B. „Guns N\' Roses“).
+- Keine Datenbankänderung.
+
 ## 3.0.0-dev7.10.1
 - Neu: Jury-Vorstellung je Contest (öffentliche Info-Seite für Bands). Auswahl unter „Song Contest → Seiten & Links“ je Contest; automatisch erkannt werden /contest/jury<Jahr>/ und /<contest-slug>/jury/ (z. B. /contest/jury2027/, /song-contest-2026/jury/).
 - Neu: Shortcode `[songcontest_jury_link]` – Button zur Jury-Vorstellung des aktiven Contests (Attribute `label`, `class`, `contest_id`); ohne hinterlegte Seite keine Ausgabe.

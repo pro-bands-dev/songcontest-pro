@@ -194,7 +194,7 @@ echo "<tr>";
 
 echo "<td>";
 if($band->image){
-echo "<img src='".esc_url($band->image)."' style='width:80px;height:auto;'>";
+echo "<img src='".esc_url(scp_image_url($band->image,'250'))."' style='width:80px;height:auto;'>";
 }
 echo "</td>";
 

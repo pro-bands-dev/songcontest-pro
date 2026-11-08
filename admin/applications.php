@@ -369,7 +369,7 @@ function scp_applications_page(){
 
         echo "<td>";
         if($r->image){
-            echo "<img src='".esc_url($r->image)."' style='max-width:80px;height:auto;'>";
+            echo "<img src='".esc_url(scp_image_url($r->image,'250'))."' style='max-width:80px;height:auto;'>";
         }
         echo "</td>";
 

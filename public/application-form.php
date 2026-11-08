@@ -66,9 +66,12 @@ function scp_application(){
 
     ob_start();
 
-    if(isset($_POST['apply'])){
+    global $wpdb;
 
-        global $wpdb;
+    $scp_application_error = '';
+    $scp_application_saved = false;
+
+    if(isset($_POST['apply'])){
 
         /*
          * Sicherheitsprüfung:
@@ -88,50 +91,26 @@ function scp_application(){
         require_once(ABSPATH.'wp-admin/includes/media.php');
         require_once(ABSPATH.'wp-admin/includes/image.php');
 
-        $image_url = "";
-        $audio_url = "";
+        /*
+         * Uploads zuerst prüfen. Audio kommt als MP3 an – WAV wird im
+         * Browser vor dem Absenden umgewandelt (assets/audio-convert.js).
+         */
+        $upload_error = function_exists('scp_validate_application_uploads')
+            ? scp_validate_application_uploads()
+            : '';
 
-        // IMAGE UPLOAD
-        if(!empty($_FILES['band_image']['name'])){
-
-            $attachment_id = media_handle_upload('band_image',0);
-
-            if(!is_wp_error($attachment_id)){
-
-                $image_url = wp_get_attachment_url($attachment_id);
-
-                // Bildgröße optimieren
-                $path = get_attached_file($attachment_id);
-                $editor = wp_get_image_editor($path);
-
-                if(!is_wp_error($editor)){
-
-                    $size = $editor->get_size();
-                    $max = 400;
-
-                    if($size['width'] > $size['height']){
-                        $new_width = $max;
-                        $new_height = intval(($size['height']/$size['width'])*$max);
-                    }else{
-                        $new_height = $max;
-                        $new_width = intval(($size['width']/$size['height'])*$max);
-                    }
-
-                    $editor->resize($new_width,$new_height,false);
-                    $editor->save($path);
-                }
-            }
+        if($upload_error !== ''){
+            $scp_application_error = $upload_error;
         }
+    }
 
-        // AUDIO UPLOAD
-        if(!empty($_FILES['band_audio']['name'])){
+    if(isset($_POST['apply']) && $scp_application_error === ''){
 
-            $attachment_id = media_handle_upload('band_audio',0);
+        // IMAGE UPLOAD: Original + 500×500 + 250×250 (siehe includes/media.php)
+        $image_url = scp_handle_application_image_upload();
 
-            if(!is_wp_error($attachment_id)){
-                $audio_url = wp_get_attachment_url($attachment_id);
-            }
-        }
+        // AUDIO UPLOAD (MP3)
+        $audio_url = scp_handle_application_audio_upload();
 
         // Einwilligung für Infos/Angebote per E-Mail (freiwillig, Double-Opt-In)
         list($marketing_fields, $marketing_raw_token) = function_exists('scp_marketing_prepare_application_fields')
@@ -143,17 +122,17 @@ function scp_application(){
             $wpdb->prefix.'scp_artists',
             array_merge([
                 'contest_id' => $contest_id,
-                'name'      => sanitize_text_field($_POST['bandname']),
-                'title'     => sanitize_text_field($_POST['songtitle']),
-                'genre'     => sanitize_text_field($_POST['genre']),
-                'length'    => sanitize_text_field($_POST['length']),
-                'band_info' => sanitize_textarea_field($_POST['band_info']),
-                'song_info' => sanitize_textarea_field($_POST['song_info']),
-                'contact'   => sanitize_text_field($_POST['contact']),
-                'email'     => sanitize_email($_POST['email']),
-                'instagram' => esc_url_raw($_POST['instagram']),
-                'facebook'  => esc_url_raw($_POST['facebook']),
-                'website'   => esc_url_raw($_POST['website']),
+                'name'      => sanitize_text_field(wp_unslash($_POST['bandname'] ?? '')),
+                'title'     => sanitize_text_field(wp_unslash($_POST['songtitle'] ?? '')),
+                'genre'     => sanitize_text_field(wp_unslash($_POST['genre'] ?? '')),
+                'length'    => sanitize_text_field(wp_unslash($_POST['length'] ?? '')),
+                'band_info' => sanitize_textarea_field(wp_unslash($_POST['band_info'] ?? '')),
+                'song_info' => sanitize_textarea_field(wp_unslash($_POST['song_info'] ?? '')),
+                'contact'   => sanitize_text_field(wp_unslash($_POST['contact'] ?? '')),
+                'email'     => sanitize_email(wp_unslash($_POST['email'] ?? '')),
+                'instagram' => esc_url_raw(wp_unslash($_POST['instagram'] ?? '')),
+                'facebook'  => esc_url_raw(wp_unslash($_POST['facebook'] ?? '')),
+                'website'   => esc_url_raw(wp_unslash($_POST['website'] ?? '')),
                 'image'     => $image_url,
                 'audio'     => $audio_url,
                 'status'    => 'pending',
@@ -165,24 +144,26 @@ function scp_application(){
 
             error_log('[SCP APPLICATION ERROR] '.$wpdb->last_error);
 
-            echo "<p class='contest-error'>Die Bewerbung konnte nicht gespeichert werden.</p>";
+            $scp_application_error = 'Die Bewerbung konnte nicht gespeichert werden.';
 
         }else{
 
             $new_artist_id = intval($wpdb->insert_id);
 
             scp_mail_application_received(
-                sanitize_email($_POST['email']),
-                sanitize_text_field($_POST['bandname'])
+                sanitize_email(wp_unslash($_POST['email'])),
+                sanitize_text_field(wp_unslash($_POST['bandname']))
             );
+
+            $scp_application_saved = true;
 
             echo "<p class='contest-success'>Bewerbung erfolgreich gesendet.</p>";
 
             if($marketing_raw_token !== '' && $new_artist_id > 0){
 
                 scp_mail_marketing_optin(
-                    sanitize_email($_POST['email']),
-                    sanitize_text_field($_POST['bandname']),
+                    sanitize_email(wp_unslash($_POST['email'])),
+                    sanitize_text_field(wp_unslash($_POST['bandname'])),
                     $new_artist_id,
                     $marketing_raw_token
                 );
@@ -191,40 +172,59 @@ function scp_application(){
             }
         }
     }
+
+    if($scp_application_error !== ''){
+        echo "<p class='contest-error'>".esc_html($scp_application_error)."</p>";
+    }
+
+    // Nach einem Fehler die Eingaben wieder einsetzen (Dateien muss die Band neu wählen).
+    $old = function($key) use ($scp_application_error){
+        if($scp_application_error === '' || !isset($_POST[$key])) return '';
+        return esc_attr(wp_unslash($_POST[$key]));
+    };
+    $old_text = function($key) use ($scp_application_error){
+        if($scp_application_error === '' || !isset($_POST[$key])) return '';
+        return esc_textarea(wp_unslash($_POST[$key]));
+    };
+
+    if(function_exists('scp_enqueue_audio_converter')){
+        scp_enqueue_audio_converter();
+    }
     ?>
 
     <div class="band-bew-card application-card">
         <h2>Song Contest Bewerbung</h2>
 
-        <form method="post" enctype="multipart/form-data" class="contest-form">
+        <form method="post" enctype="multipart/form-data" class="contest-form" data-scp-audio-convert="1">
 
             <h3>Band Infos</h3>
 
             <h4>Felder mit * sind Pflichtfelder</h4>
 
-            <input type="text" name="bandname" placeholder="Band/Künstlername*" required>
-            <input type="text" name="contact" placeholder="Ansprechpartner">
-            <input type="email" name="email" placeholder="E-Mail*" required>
-            <textarea name="band_info" placeholder="Bandbeschreibung" required></textarea>
+            <input type="text" name="bandname" placeholder="Band/Künstlername*" required value="<?php echo $old('bandname'); ?>">
+            <input type="text" name="contact" placeholder="Ansprechpartner" value="<?php echo $old('contact'); ?>">
+            <input type="email" name="email" placeholder="E-Mail*" required value="<?php echo $old('email'); ?>">
+            <textarea name="band_info" placeholder="Bandbeschreibung" required><?php echo $old_text('band_info'); ?></textarea>
 
-            <input type="text" name="instagram" placeholder="Instagram Link (https://instagram.com/...)">
-            <input type="text" name="facebook" placeholder="Facebook Link (https://facebook.com/...)">
-            <input type="text" name="website" placeholder="Website (https://...)">
+            <input type="text" name="instagram" placeholder="Instagram Link (https://instagram.com/...)" value="<?php echo $old('instagram'); ?>">
+            <input type="text" name="facebook" placeholder="Facebook Link (https://facebook.com/...)" value="<?php echo $old('facebook'); ?>">
+            <input type="text" name="website" placeholder="Website (https://...)" value="<?php echo $old('website'); ?>">
 
             <h3>Song Infos</h3>
 
-            <input type="text" name="songtitle" placeholder="Songtitel*" required>
-            <input type="text" name="genre" placeholder="Genre*" required>
-            <input type="text" name="length" placeholder="Länge (z.B. 03:42)">
-            <textarea name="song_info" placeholder="Songbeschreibung"></textarea>
+            <input type="text" name="songtitle" placeholder="Songtitel*" required value="<?php echo $old('songtitle'); ?>">
+            <input type="text" name="genre" placeholder="Genre*" required value="<?php echo $old('genre'); ?>">
+            <input type="text" name="length" placeholder="Länge (z.B. 03:42)" value="<?php echo $old('length'); ?>">
+            <textarea name="song_info" placeholder="Songbeschreibung"><?php echo $old_text('song_info'); ?></textarea>
 
             <h3>Upload</h3>
 
             <label>Bandfoto</label>
             <input type="file" name="band_image" accept="image/jpeg,image/png,image/webp">
 
-            <label>Audiofile</label>
-            <input type="file" name="band_audio" accept="audio/mpeg,audio/wav">
+            <label>Audiofile (MP3 oder WAV – WAV wird automatisch in MP3 umgewandelt)</label>
+            <input type="file" name="band_audio" accept="audio/mpeg,audio/mp3,audio/wav,audio/x-wav,audio/wave,.mp3,.wav">
+            <p class="scp-audio-status" aria-live="polite" hidden></p>
 
             <?php if(function_exists('scp_application_privacy_notice_html')){ ?>
                 <p class="scp-privacy-notice"><?php echo wp_kses(
